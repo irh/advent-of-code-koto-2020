@@ -1,0 +1,62 @@
+# https://adventofcode.com/2020/day/1
+
+import io, koto, string.print, test.assert_eq
+
+
+parse_expenses = |input|
+  input
+    .lines()
+    .each |line| line.to_number()
+    .to_tuple()
+
+
+product_of_two_expenses_that_sum_to_2020 = |expenses|
+  for x in 0..expenses.size()
+    expense_x = expenses[x]
+    for y in (x + 1)..expenses.size()
+      expense_y = expenses[y]
+      if expense_x + expense_y == 2020
+        return expense_x * expense_y
+
+
+product_of_three_expenses_that_sum_to_2020 = |expenses|
+  for x in 0..expenses.size()
+    expense_x = expenses[x]
+    for y in (x + 1)..expenses.size()
+      expense_y = expenses[y]
+      for z in (y + 1)..expenses.size()
+        expense_z = expenses[z]
+        if expense_x + expense_y + expense_z == 2020
+          return expense_x * expense_y * expense_z
+
+
+export main = ||
+  input = io.read_to_string koto.script_dir + "./input/01"
+  expenses = parse_expenses input
+
+  part_one = product_of_two_expenses_that_sum_to_2020 expenses
+  print "Part one: {}" part_one # 974304
+
+  part_two = product_of_three_expenses_that_sum_to_2020 expenses
+  print "Part two: {}" part_two # 236430480
+
+
+export tests =
+  pre_test: |self|
+    self.input = "\
+1721
+979
+366
+299
+675
+1456"
+
+  test_part_one: |self|
+    expenses = parse_expenses self.input
+    result = product_of_two_expenses_that_sum_to_2020 expenses
+    assert_eq result 514579
+
+  test_part_two: |self|
+    expenses = parse_expenses self.input
+    result = product_of_three_expenses_that_sum_to_2020 expenses
+    assert_eq result 241861950
