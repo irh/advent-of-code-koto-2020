@@ -26,9 +26,7 @@ seat_id = |seat_code|
 
 
 find_missing_seat = |sorted_seat_ids|
-  x = sorted_seat_ids.iter()
-  x.next()
-  for a, b in sorted_seat_ids.zip(x)
+  for a, b in sorted_seat_ids.zip(sorted_seat_ids.skip 1)
     if b - a == 2
       return b - 1
 
