@@ -35,44 +35,31 @@ passport_is_valid_part_one = |passport|
     passport.contains_key field
 
 
-string_is_number_in_range = |maybe_number, allowed_range|
-  match maybe_number.to_number()
-    () then false
-    n then allowed_range.contains n
-
-
 passport_is_valid_part_two = |passport|
   for field in expected_fields
     value = passport.get field
     if value == () then return false
     match field
-      "byr"
-        if not string_is_number_in_range value 1920..=2002 then return false
-      "iyr"
-        if not string_is_number_in_range value 2010..=2020 then return false
-      "eyr"
-        if not string_is_number_in_range value 2020..=2030 then return false
+      "byr" then if not 1920 <= value.to_number() <= 2002 then return false
+      "iyr" then if not 2010 <= value.to_number() <= 2020 then return false
+      "eyr" then if not 2020 <= value.to_number() <= 2030 then return false
       "hgt"
-        end_of_number = 0
-        for c in value.chars()
-          if not is_digit c
-            break
-          end_of_number += 1
+        end_of_number = value.chars().position |c| not is_digit c
+        if end_of_number == () then return false
         n = (value.slice 0 end_of_number).to_number()
         unit = value.slice end_of_number
         match unit
-          "cm" then if not (150..=193).contains n then return false
-          "in" then if not (59..=76).contains n then return false
+          "cm" then if not 150 <= n <= 193 then return false
+          "in" then if not 59 <= n <= 76 then return false
           _ then return false
       "hcl"
-        if not (value.slice 0 1) == "#" then return false
+        if (value.slice 0 1) != "#" then return false
         color = value.slice 1
-        if not color.size() == 6 then return false
+        if color.size() != 6 then return false
         if not color.chars().all(|c| "0123456789abcdef".contains c) then return false
-      "ecl"
-        if not (eye_colours.contains value) then return false
+      "ecl" then if not (eye_colours.contains value) then return false
       "pid"
-        if not value.size() == 9 then return false
+        if value.size() != 9 then return false
         if not value.chars().all(|digit| is_digit digit) then return false
   true
 
@@ -137,7 +124,10 @@ eyr:2022
 
 iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
 "
-    assert passports.all(|passport| passport_is_valid_part_two passport)
+    for passport in passports
+      if not passport_is_valid_part_two passport
+        debug passport
+        assert false
 
   test_part_two_invalid: |self|
     passports = parse_passports "\
