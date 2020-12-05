@@ -3,20 +3,24 @@
 import io, koto, string.print, test.assert_eq
 
 
+lower_half = |r| r.start()..(r.start() + r.size() / 2)
+upper_half = |r| (r.start() + r.size() / 2)..r.end()
+
+
 seat_id = |seat_code|
   x = seat_code.chars()
   row = x
     .take 7
     .fold 0..128 |range, c|
       match c
-        "F" then range.start()..(range.start() + range.size() / 2)
-        "B" then (range.start() + range.size() / 2)..range.end()
+        "F" then lower_half range
+        "B" then upper_half range
     .start()
   column = x
     .fold 0..8 |range, c|
       match c
-        "L" then range.start()..(range.start() + range.size() / 2)
-        "R" then (range.start() + range.size() / 2)..range.end()
+        "L" then lower_half range
+        "R" then upper_half range
     .start()
   row * 8 + column
 
