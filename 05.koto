@@ -1,0 +1,50 @@
+# https://adventofcode.com/2020/day/5
+
+import io, koto, string.print, test.assert_eq
+
+
+seat_id = |seat_code|
+  x = seat_code.chars()
+  row = x
+    .take 7
+    .fold 0..128 |range, c|
+      match c
+        "F" then range.start()..(range.start() + range.size() / 2)
+        "B" then (range.start() + range.size() / 2)..range.end()
+    .start()
+  column = x
+    .fold 0..8 |range, c|
+      match c
+        "L" then range.start()..(range.start() + range.size() / 2)
+        "R" then (range.start() + range.size() / 2)..range.end()
+    .start()
+  row * 8 + column
+
+
+find_missing_seat = |sorted_seat_ids|
+  x = sorted_seat_ids.iter()
+  x.next()
+  for a, b in sorted_seat_ids.zip(x)
+    if b - a == 2
+      return b - 1
+
+
+export main = ||
+  seat_codes = (io.read_to_string koto.script_dir + "./input/05")
+
+  seat_ids = seat_codes
+    .lines()
+    .each |seat_code| seat_id seat_code
+    .to_list()
+  seat_ids.sort()
+
+  print "Part one: {}" seat_ids.last() # 976
+  print "Part two: {}" (find_missing_seat seat_ids) # 685
+
+
+export tests =
+  test_part_one: ||
+    assert_eq (seat_id "FBFBBFFRLR") 357
+    assert_eq (seat_id "BFFFBBFRRR") 567
+    assert_eq (seat_id "FFFBBBFRRR") 119
+    assert_eq (seat_id "BBFFBBFRLL") 820
