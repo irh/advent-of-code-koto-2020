@@ -1,0 +1,76 @@
+# https://adventofcode.com/2020/day/6
+
+import io, koto, string.print, test.assert_eq
+
+count_answers_part_one = |answers|
+  result = 0
+  answers_for_group = {}
+  for line in answers.lines()
+    if line.is_empty()
+      result += answers_for_group.size()
+      answers_for_group = {}
+    else
+      for answer in line.chars()
+        answers_for_group.insert answer
+  result += answers_for_group.size()
+  result
+
+count_answers_part_two = |answers|
+  count_for_group = |people_in_group, answers_for_group|
+    answers_for_group
+      .keep |answer_and_count| # tuple unpacking for args would be nice here
+        _, count = answer_and_count
+        count == people_in_group
+      .count()
+
+  result = 0
+  answers_for_group = {}
+  people_in_group = 0
+  for line in answers.lines()
+    if line.is_empty()
+      result += count_for_group people_in_group answers_for_group
+      answers_for_group = {}
+      people_in_group = 0
+    else
+      people_in_group += 1
+      for answer in line.chars()
+        #- update syntax for map entries?
+        answers_for_group.update answer 0 |count| count + 1
+        -#
+        new_count = match answers_for_group.get answer
+          () then 1
+          x then x + 1
+        answers_for_group.insert answer new_count
+  result += count_for_group people_in_group answers_for_group
+  result
+
+export main = ||
+  input = (io.read_to_string koto.script_dir + "./input/06")
+
+  print "Part one: {}" (count_answers_part_one input) # 6903
+  print "Part two: {}" (count_answers_part_two input) # 3493
+
+export tests =
+  pre_test: |self|
+    self.input = "\
+abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b"
+
+  test_part_one: |self|
+    assert_eq (count_answers_part_one self.input) 11
+
+  test_part_two: |self|
+    assert_eq (count_answers_part_two self.input) 6
