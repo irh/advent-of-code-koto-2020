@@ -13,7 +13,7 @@ parse_expenses = |input|
 product_of_two_expenses_that_sum_to_2020 = |expenses|
   for x in 0..expenses.size()
     expense_x = expenses[x]
-    for y in (x + 1)..expenses.size()
+    for y in x + 1..expenses.size()
       expense_y = expenses[y]
       if expense_x + expense_y == 2020
         return expense_x * expense_y
@@ -22,9 +22,9 @@ product_of_two_expenses_that_sum_to_2020 = |expenses|
 product_of_three_expenses_that_sum_to_2020 = |expenses|
   for x in 0..expenses.size()
     expense_x = expenses[x]
-    for y in (x + 1)..expenses.size()
+    for y in x + 1..expenses.size()
       expense_y = expenses[y]
-      for z in (y + 1)..expenses.size()
+      for z in y + 1..expenses.size()
         expense_z = expenses[z]
         if expense_x + expense_y + expense_z == 2020
           return expense_x * expense_y * expense_z
