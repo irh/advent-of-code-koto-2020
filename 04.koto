@@ -18,7 +18,7 @@ parse_passports = |passports|
       if field.is_empty()
         continue
       key, value = field.split(":").to_tuple()
-      if (expected_fields.contains key) or key == "cid"
+      if key == "cid" or expected_fields.contains key
         passport.insert key value
       else
         assert false
