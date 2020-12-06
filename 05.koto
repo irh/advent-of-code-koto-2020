@@ -2,8 +2,8 @@
 
 import io, koto, string.print, test.assert_eq
 
-lower_half = |r| r.start()..(r.start() + r.size() / 2)
-upper_half = |r| (r.start() + r.size() / 2)..r.end()
+lower_half = |r| r.start()..r.start() + r.size() / 2
+upper_half = |r| r.start() + r.size() / 2..r.end()
 
 partition = |input, lower, max|
   input
