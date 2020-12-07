@@ -35,7 +35,6 @@ count_valid_passwords_part_one = |input|
     .keep |policy_and_password|
       policy, password = policy_and_password
       letter_count = password
-        .chars()
         .keep |letter| letter == policy.required_letter
         .count()
       policy.required_min <= letter_count <= policy.required_max
@@ -47,7 +46,7 @@ count_valid_passwords_part_two = |input|
     .keep |policy_and_password|
       policy, password = policy_and_password
       first, second = policy.required_min - 1, policy.required_max - 1
-      matches = password.chars().enumerate()
+      matches = password.enumerate()
         .keep |index_and_letter|
           i, letter = index_and_letter
           (i == first or i == second) and letter == policy.required_letter

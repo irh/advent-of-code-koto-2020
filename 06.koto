@@ -10,7 +10,7 @@ count_answers_part_one = |answers|
       result += answers_for_group.size()
       answers_for_group = {}
     else
-      for answer in line.chars()
+      for answer in line
         answers_for_group.insert answer
   result += answers_for_group.size()
   result
@@ -33,7 +33,7 @@ count_answers_part_two = |answers|
       people_in_group = 0
     else
       people_in_group += 1
-      for answer in line.chars()
+      for answer in line
         answers_for_group.update answer 0 |count| count + 1
   result += count_for_group people_in_group answers_for_group
   result

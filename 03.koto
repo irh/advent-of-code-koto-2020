@@ -7,7 +7,7 @@ from test import assert, assert_eq
 parse_input = |input|
   input.lines()
     .each |line|
-      line.chars()
+      line
         .each |c| c == "#"
         .to_tuple()
     .to_tuple()

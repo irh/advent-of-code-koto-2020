@@ -15,8 +15,8 @@ partition = |input, lower, max|
     .start()
 
 seat_id = |seat_code|
-  row = partition seat_code.chars().take(7) "F" 128
-  col = partition seat_code.chars().skip(7) "L" 8
+  row = partition seat_code.take(7) "F" 128
+  col = partition seat_code.skip(7) "L" 8
   row * 8 + col
 
 find_missing_seat = |sorted_seat_ids|
