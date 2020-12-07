@@ -1,0 +1,85 @@
+# https://adventofcode.com/2020/day/7
+
+import io, koto, string.print, test.assert_eq
+
+parse_bag_rules = |input|
+  input
+    .lines()
+    .each |line|
+      # e.g. light red bags contain 1 bright white bag, 2 muted yellow bags.
+      # e.g.  faded blue bags contain no other bags.
+      words = line.split " "
+      bag = "{} {}".format words.next() words.next()
+      words.next() # bags
+      words.next() # contain
+      contained_bags = {}
+      loop
+        match words.next()
+          "no" or () then break
+          quantity
+            contained_bag = "{} {}".format words.next() words.next()
+            contained_bags.insert contained_bag quantity.to_number()
+            words.next()
+      bag, contained_bags
+    .to_map()
+
+count_bag_options = |target_bag, rules|
+  bag_contains_target_bag = |bag|
+    rules
+      .get(bag)
+      .keys()
+      .any |option| option == target_bag or bag_contains_target_bag option
+
+  rules
+    .keep |bag_and_options|
+      bag, options = bag_and_options # TODO Tuple arg unpacking
+      bag != target_bag and bag_contains_target_bag bag
+    .count()
+
+count_contained_bags = |bag, rules|
+  rules
+    .get bag
+    .fold 0 |result, contained_bag_and_count|
+      contained_bag, count = contained_bag_and_count # TODO Tuple arg unpacking
+      extra_bags = count + count * (count_contained_bags contained_bag rules)
+      result + extra_bags
+
+export main = ||
+  rules = parse_bag_rules (io.read_to_string koto.script_dir + "./input/07")
+
+  print "Part one: {}" (count_bag_options "shiny gold" rules) # 272
+  print "Part two: {}" (count_contained_bags "shiny gold" rules) # 172246
+
+export tests =
+  pre_test: |self|
+    self.example_1 = "\
+light red bags contain 1 bright white bag, 2 muted yellow bags.
+dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+bright white bags contain 1 shiny gold bag.
+muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+faded blue bags contain no other bags.
+dotted black bags contain no other bags.
+"
+
+  test_part_one: |self|
+    rules = parse_bag_rules self.example_1
+    assert_eq (count_bag_options "shiny gold" rules) 4
+
+  test_part_two_example_1: |self|
+    rules = parse_bag_rules self.example_1
+    assert_eq (count_contained_bags "shiny gold" rules) 32
+
+  test_part_two_example_2: |self|
+    rules = parse_bag_rules "\
+shiny gold bags contain 2 dark red bags.
+dark red bags contain 2 dark orange bags.
+dark orange bags contain 2 dark yellow bags.
+dark yellow bags contain 2 dark green bags.
+dark green bags contain 2 dark blue bags.
+dark blue bags contain 2 dark violet bags.
+dark violet bags contain no other bags.
+"
+    assert_eq (count_contained_bags "shiny gold" rules) 126
