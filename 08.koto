@@ -1,0 +1,92 @@
+# https://adventofcode.com/2020/day/8
+
+import io, koto, list, string.print
+from test import assert, assert_eq
+
+op_nop = 0
+op_acc = 1
+op_jmp = 2
+
+parse_program = |input|
+  input
+    .lines()
+    .each |line|
+      op = match line.slice 0 3
+        "nop" then op_nop
+        "acc" then op_acc
+        "jmp" then op_jmp
+      value = line.slice(4).to_number()
+      num2 op value
+    .to_tuple()
+
+run_program = |program|
+  ip = 0
+  acc = 0
+  visited = list.with_size program.size() false
+  while ip < program.size() and not visited[ip]
+    # Unpacking a num2 would be nice here: op, value = program[ip]
+    op = program[ip][0]
+    value = program[ip][1]
+    visited[ip] = true
+    if op == op_nop
+      ip += 1
+    else if op == op_acc
+      acc += value
+      ip += 1
+    else if op == op_jmp
+      ip += value
+  acc, ip >= program.size()
+
+fix_program_and_get_result = |program|
+  for ip in 0..program.size()
+    op = program[ip][0]
+    value = program[ip][1]
+    new_op = if op == op_nop
+      op_jmp
+    else if op == op_jmp
+      op_nop
+    else
+      continue
+    fixed = program.to_list()
+    # It would be nice to be able to assign directly to a num2 element
+    fixed[ip] = num2 new_op value
+    result, terminated = run_program fixed
+    if terminated
+      return result
+
+export main = ||
+  program = parse_program (io.read_to_string koto.script_dir + "./input/08")
+  print "Part one: {}" (run_program program)[0] # 1915
+  print "Part two: {}" (fix_program_and_get_result program) # 944
+
+export tests =
+  pre_test: |self|
+    self.program = parse_program "\
+nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6
+"
+
+  test_parse_program: |self|
+    assert_eq self.program.size() 9
+    assert_eq self.program[0][0] op_nop
+    assert_eq self.program[0][1] 0
+    assert_eq self.program[2][0] op_jmp
+    assert_eq self.program[2][1] 4
+    assert_eq self.program[5][0] op_acc
+    assert_eq self.program[5][1] -99
+
+  test_part_one: |self|
+    result, terminated = run_program self.program
+    assert_eq result 5
+    assert not terminated
+
+  test_part_two: |self|
+    result = fix_program_and_get_result self.program
+    assert_eq result 8
