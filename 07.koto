@@ -27,21 +27,16 @@ count_bag_options = |target_bag, rules|
   bag_contains_target_bag = |bag|
     rules
       .get(bag)
-      .any |entry|
-        option, _ = entry # unpacking the key is faster than iterating over .keys()
-        option == target_bag or bag_contains_target_bag option
+      .any |(option, _)| option == target_bag or bag_contains_target_bag option
 
   rules
-    .keep |bag_and_options|
-      bag, options = bag_and_options # TODO Tuple arg unpacking
-      bag != target_bag and bag_contains_target_bag bag
+    .keep |(bag, options)| bag != target_bag and bag_contains_target_bag bag
     .count()
 
 count_contained_bags = |bag, rules|
   rules
     .get bag
-    .fold 0 |result, contained_bag_and_count|
-      contained_bag, count = contained_bag_and_count # TODO Tuple arg unpacking
+    .fold 0 |result, (contained_bag, count)|
       extra_bags = count + count * (count_contained_bags contained_bag rules)
       result + extra_bags
 

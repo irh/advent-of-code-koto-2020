@@ -32,8 +32,7 @@ parse_input = |input|
 
 count_valid_passwords_part_one = |input|
   input
-    .keep |policy_and_password|
-      policy, password = policy_and_password
+    .keep |(policy, password)|
       letter_count = password
         .keep |letter| letter == policy.required_letter
         .count()
@@ -43,12 +42,11 @@ count_valid_passwords_part_one = |input|
 
 count_valid_passwords_part_two = |input|
   input
-    .keep |policy_and_password|
-      policy, password = policy_and_password
+    .keep |(policy, password)|
       first, second = policy.required_min - 1, policy.required_max - 1
-      matches = password.enumerate()
-        .keep |index_and_letter|
-          i, letter = index_and_letter
+      matches = password
+        .enumerate()
+        .keep |(i, letter)|
           (i == first or i == second) and letter == policy.required_letter
         .count()
       matches == 1

@@ -18,9 +18,7 @@ count_answers_part_one = |answers|
 count_answers_part_two = |answers|
   count_for_group = |people_in_group, answers_for_group|
     answers_for_group
-      .keep |answer_and_count| # tuple unpacking for args would be nice here
-        _, count = answer_and_count
-        count == people_in_group
+      .keep |(_, count)| count == people_in_group
       .count()
 
   result = 0
@@ -34,7 +32,8 @@ count_answers_part_two = |answers|
     else
       people_in_group += 1
       for answer in line
-        answers_for_group.update answer 0 |count| count + 1
+        answers_for_group.update answer 0
+          |count| count + 1
   result += count_for_group people_in_group answers_for_group
   result
 
