@@ -24,9 +24,7 @@ run_program = |program|
   acc = 0
   visited = list.with_size program.size() false
   while ip < program.size() and not visited[ip]
-    # Unpacking a num2 would be nice here: op, value = program[ip]
-    op = program[ip][0]
-    value = program[ip][1]
+    op, value = program[ip]
     visited[ip] = true
     if op == op_nop
       ip += 1
@@ -39,8 +37,7 @@ run_program = |program|
 
 fix_program_and_get_result = |program|
   for ip in 0..program.size()
-    op = program[ip][0]
-    value = program[ip][1]
+    op, value = program[ip]
     new_op = if op == op_nop
       op_jmp
     else if op == op_jmp
@@ -48,7 +45,6 @@ fix_program_and_get_result = |program|
     else
       continue
     fixed = program.to_list()
-    # It would be nice to be able to assign directly to a num2 element
     fixed[ip] = num2 new_op value
     result, terminated = run_program fixed
     if terminated
