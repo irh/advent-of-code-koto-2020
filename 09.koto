@@ -1,0 +1,116 @@
+# https://adventofcode.com/2020/day/9
+
+import io, koto, list, string.print
+from test import assert, assert_eq
+
+ring_buffer = |capacity|
+  data: []
+  capacity: capacity
+  start: 0
+
+  size: |self| self.data.size()
+
+  push: |self, x|
+    if self.size() < self.capacity
+      self.data.push x
+    else
+      self.data[self.start] = x
+      self.start = (self.start + 1) % self.capacity
+
+  get: |self, index|
+    self.data.get ((self.start + index) % self.capacity)
+
+parse_input = |input|
+  input
+    .lines()
+    .each |line| line.to_number()
+    .to_tuple()
+
+input_is_valid = |buffer, input|
+  size = buffer.size()
+  for i in 0..size
+    a = buffer.get i
+    for j in (i + 1)..size
+      b = buffer.get j
+      if a + b == input
+        return true
+  false
+
+find_first_invalid_input = |input, buffer_size|
+  buffer = ring_buffer buffer_size
+  for n in input.take buffer_size
+    buffer.push n
+  for n in input.skip buffer_size
+    if not input_is_valid buffer n
+      return n
+    buffer.push n
+
+find_encryption_weakness = |input, buffer_size|
+  invalid = find_first_invalid_input input buffer_size
+  size = input.size()
+  for i in 0..size
+    a = input[i]
+    sum = a
+    for j in (i + 1)..size
+      b = input[j]
+      sum += b
+      if sum == invalid
+        range = input[i..=j]
+        return range.min() + range.max()
+
+export main = ||
+  input = parse_input (io.read_to_string koto.script_dir + "./input/09")
+  print "Part one: {}" (find_first_invalid_input input 25) # 1930745883
+  print "Part two: {}" (find_encryption_weakness input 25) # 268878261
+
+export tests =
+  pre_test: |self|
+    self.input = parse_input "\
+35
+20
+15
+25
+47
+40
+62
+55
+65
+95
+102
+117
+150
+182
+127
+219
+299
+277
+309
+576
+"
+
+  test_part_one_example_one: ||
+    buffer = ring_buffer 25
+    # preamble, #s 1-25, with 20 in first position
+    buffer.push 20
+    for i in 1..=19
+      buffer.push i
+    for i in 21..=25
+      buffer.push i
+
+    assert (input_is_valid buffer 26)
+    assert (input_is_valid buffer 49)
+    assert not (input_is_valid buffer 100)
+    assert not (input_is_valid buffer 50)
+
+    buffer.push 45
+    assert (input_is_valid buffer 26)
+    assert not (input_is_valid buffer 65)
+    assert (input_is_valid buffer 64)
+    assert (input_is_valid buffer 66)
+
+  test_part_one_example_two: |self|
+    assert_eq (find_first_invalid_input self.input 5) 127
+
+  test_part_two: |self|
+    assert_eq (find_encryption_weakness self.input 5) 62
+
