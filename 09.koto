@@ -38,25 +38,22 @@ input_is_valid = |buffer, input|
 
 find_first_invalid_input = |input, buffer_size|
   buffer = ring_buffer buffer_size
-  for n in input.take buffer_size
-    buffer.push n
-  for n in input.skip buffer_size
-    if not input_is_valid buffer n
-      return n
+  for i, n in input.enumerate()
+    if buffer.size() == buffer_size
+      if not input_is_valid buffer n
+        return n
     buffer.push n
 
 find_encryption_weakness = |input, buffer_size|
   invalid = find_first_invalid_input input buffer_size
   size = input.size()
   for i in 0..size
-    a = input[i]
-    sum = a
+    sum = input[i]
     for j in (i + 1)..size
-      b = input[j]
-      sum += b
+      sum += input[j]
       if sum == invalid
         range = input[i..=j]
-        return range.min() + range.max()
+        return range.min() + range.max() # min_max?
 
 export main = ||
   input = parse_input (io.read_to_string koto.script_dir + "./input/09")
