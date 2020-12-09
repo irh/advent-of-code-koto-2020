@@ -52,8 +52,8 @@ find_encryption_weakness = |input, buffer_size|
     for j in (i + 1)..size
       sum += input[j]
       if sum == invalid
-        range = input[i..=j]
-        return range.min() + range.max() # min_max?
+        min, max = input[i..=j].min_max()
+        return min + max
 
 export main = ||
   input = parse_input (io.read_to_string koto.script_dir + "./input/09")
