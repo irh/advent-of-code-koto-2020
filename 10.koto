@@ -1,0 +1,65 @@
+# https://adventofcode.com/2020/day/10
+
+import io, koto, list, string.print
+from test import assert, assert_eq
+
+parse_input = |input|
+  input
+    .lines()
+    .each |line| line.to_number()
+    .to_list()
+    .sort_copy()
+
+joltage_differences = |adapters|
+  differences = [0, 0, 0, 0]
+  previous = 0
+  for adapter in adapters
+    difference = adapter - previous
+    differences[difference] += 1
+    previous = adapter
+  differences[3] += 1
+  differences
+
+count_arrangements = |adapters|
+  # The first adapter has a single arrangement
+  arrangements = [1]
+  # Iterate over the remaining adapters
+  for i in 1..adapters.size()
+    adapter = adapters[i]
+    # Adapters with ratings <= 3 are also valid start points
+    arrangements_for_adapter = if adapter <= 3 then 1 else 0
+    # Add the number of arrangements from previous adapters within range
+    for j in (i - 1)..=0
+      if adapter - adapters[j] <= 3
+        arrangements_for_adapter += arrangements[j]
+      else
+        break
+    arrangements.push arrangements_for_adapter
+  # The result is the arrangement count for the last adapter
+  arrangements.last()
+
+export main = ||
+  adapters = parse_input (io.read_to_string koto.script_dir + "./input/10")
+  differences = joltage_differences adapters
+  print "Part one: {}" (differences[1] * differences[3]) # 2040
+  print "Part two: {}" (count_arrangements adapters) # 28346956187648
+
+export tests =
+  pre_test: |self|
+    self.adapters_1 =
+      parse_input (io.read_to_string koto.script_dir + "./input/10-example-1")
+    self.adapters_2 =
+      parse_input (io.read_to_string koto.script_dir + "./input/10-example-2")
+
+  test_part_one: |self|
+    differences = joltage_differences self.adapters_1
+    assert_eq differences[1] 7
+    assert_eq differences[3] 5
+
+    differences = joltage_differences self.adapters_2
+    assert_eq differences[1] 22
+    assert_eq differences[3] 10
+
+  test_part_two: |self|
+    assert_eq (count_arrangements self.adapters_1) 8
+    assert_eq (count_arrangements self.adapters_2) 19208
