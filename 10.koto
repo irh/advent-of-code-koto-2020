@@ -1,7 +1,6 @@
 # https://adventofcode.com/2020/day/10
 
-import io, koto, list, string.print
-from test import assert, assert_eq
+import io, koto, string.print, test.assert_eq
 
 parse_input = |input|
   input
@@ -29,7 +28,7 @@ count_arrangements = |adapters|
     # Adapters with ratings <= 3 are also valid start points
     arrangements_for_adapter = if adapter <= 3 then 1 else 0
     # Add the number of arrangements from previous adapters within range
-    for j in (i - 1)..=0
+    for j in i - 1..=0
       if adapter - adapters[j] <= 3
         arrangements_for_adapter += arrangements[j]
       else
