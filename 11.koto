@@ -55,8 +55,9 @@ make_floor_grid = |input|
         batch_start = batch_size * worker_index
         batch = batch_start..(batch_start + batch_size).min row_count
         for y in batch
+          y_index = y * row_size
           for x in 0..row_size
-            index = y * row_size + x
+            index = y_index + x
             state = grid[index]
             if state == floor then continue
 
@@ -90,8 +91,9 @@ make_floor_grid = |input|
         batch_start = batch_size * worker_index
         batch = batch_start..(batch_start + batch_size).min row_count
         for y in batch
+          y_index = y * row_size
           for x in 0..row_size
-            index = y * row_size + x
+            index = y_index + x
             state = grid[index]
             if state == floor then continue
 
