@@ -12,9 +12,9 @@ directions =
   num2 -1  1, num2 0  1, num2 1  1,
 
 make_floor_grid = |input|
-  grid, row_size, row_count = input
+  grid, row_count, row_size = input
     .lines()
-    .fold ([], 0, 0) |(grid, _, row_count), line|
+    .fold ([], 0, 0) |(grid, row_count, _), line|
       row = line
         .chars()
         .each |c|
@@ -23,7 +23,7 @@ make_floor_grid = |input|
             "L" then empty
             "#" then occupied
         .to_list()
-      (grid + row, row.size(), row_count + 1)
+      (grid + row, row_count + 1, row.size())
 
   return
     grid: grid
