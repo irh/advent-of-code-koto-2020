@@ -1,0 +1,188 @@
+# https://adventofcode.com/2020/day/11
+
+import io, koto, list, os, string.print, test.assert_eq, thread
+
+floor = 0
+empty = 1
+occupied = 2
+
+directions =
+  num2 -1 -1, num2 0 -1, num2 1 -1,
+  num2 -1  0,            num2 1  0,
+  num2 -1  1, num2 0  1, num2 1  1,
+
+make_floor_grid = |input|
+  grid, row_size, row_count = input
+    .lines()
+    .fold ([], 0, 0) |(grid, _, row_count), line|
+      row = line
+        .chars()
+        .each |c|
+          match c
+            "." then floor
+            "L" then empty
+            "#" then occupied
+        .to_list()
+      (grid + row, row.size(), row_count + 1)
+
+  return
+    grid: grid
+    temp_grid: grid.copy()
+
+    row_size: row_size
+    row_count: row_count
+
+    fill_seats: |self, filling_logic|
+      worker_count = os.physical_cpu_count()
+      batch_size = row_count / worker_count
+      workers = (0..worker_count)
+        .each |worker_index|
+          thread.create || filling_logic worker_index batch_size
+        .to_tuple()
+
+      state_changed = workers.fold false |result, worker|
+        worker.join() or result
+
+      list.swap self.grid self.temp_grid
+      state_changed
+
+    fill_seats_part_one: |self|
+      self.fill_seats |worker_index, batch_size|
+        grid, temp_grid = self.grid, self.temp_grid
+        row_size, row_count = self.row_size, self.row_count
+        state_changed = false
+
+        batch_start = batch_size * worker_index
+        batch = batch_start..(batch_start + batch_size).min row_count
+        for y in batch
+          for x in 0..row_size
+            index = y * row_size + x
+            state = grid[index]
+            if state == floor then continue
+
+            occupied_count = 0
+            for direction in directions
+              dx = x + direction[0]
+              if not (0 <= dx < row_size)
+                continue
+              dy = y + direction[1]
+              if not (0 <= dy < row_count)
+                continue
+              if grid[dy * row_size + dx] == occupied
+                occupied_count += 1
+
+            temp_grid[index] = match
+              state == empty and occupied_count == 0
+                state_changed = true
+                occupied
+              state == occupied and occupied_count >= 4
+                state_changed = true
+                empty
+              else state
+        state_changed
+
+    fill_seats_part_two: |self|
+      self.fill_seats |worker_index, batch_size|
+        grid, temp_grid = self.grid, self.temp_grid
+        row_size, row_count = self.row_size, self.row_count
+        state_changed = false
+
+        batch_start = batch_size * worker_index
+        batch = batch_start..(batch_start + batch_size).min row_count
+        for y in batch
+          for x in 0..row_size
+            index = y * row_size + x
+            state = grid[index]
+            if state == floor then continue
+
+            occupied_count = 0
+            for direction in directions
+              dx, dy = x, y
+              loop
+                dx += direction[0]
+                if not 0 <= dx < row_size
+                  break
+                dy += direction[1]
+                if not 0 <= dy < row_count
+                  break
+                dstate = grid[dy * row_size + dx]
+                match
+                  dstate == empty
+                    break
+                  dstate == occupied
+                    occupied_count += 1
+                    break
+
+            temp_grid[index] = match
+              state == empty and occupied_count == 0
+                state_changed = true
+                occupied
+              state == occupied and occupied_count >= 5
+                state_changed = true
+                empty
+              else state
+        state_changed
+
+
+    fill_seats_until_stable_part_one: |self|
+      result = 0
+      while self.fill_seats_part_one()
+        result += 1
+      result
+
+    fill_seats_until_stable_part_two: |self|
+      result = 0
+      while self.fill_seats_part_two()
+        result += 1
+      result
+
+    occupied_seats_count: |self|
+      self.grid
+        .keep |position| position == occupied
+        .count()
+
+    to_string: |self|
+      result = ""
+      for y in 0..self.row_count
+        for x in 0..self.row_size
+          result += match self.grid[y * self.row_size + x]
+            z if z == floor then "."
+            z if z == empty then "L"
+            z if z == occupied then "#"
+        result += "\n"
+
+export main = ||
+  grid = make_floor_grid (io.read_to_string koto.script_dir + "./input/11")
+
+  part_one = grid.deep_copy()
+  print "Part one"
+  print "- seats stabilised in {} steps" part_one.fill_seats_until_stable_part_one()
+  print "- occupied seats: {}" part_one.occupied_seats_count() # 2261
+
+  part_two = grid
+  print "Part two"
+  print "- seats stabilised in {} steps" part_two.fill_seats_until_stable_part_two()
+  print "- occupied seats: {}" part_two.occupied_seats_count() # 2039
+
+export tests =
+  pre_test: |self|
+    self.grid = make_floor_grid "\
+L.LL.LL.LL
+LLLLLLL.LL
+L.L.L..L..
+LLLL.LL.LL
+L.LL.LL.LL
+L.LLLLL.LL
+..L.L.....
+LLLLLLLLLL
+L.LLLLLL.L
+L.LLLLL.LL
+"
+
+  test_part_one: |self|
+    assert_eq self.grid.fill_seats_until_stable_part_one() 5
+    assert_eq self.grid.occupied_seats_count() 37
+
+  test_part_two: |self|
+    assert_eq self.grid.fill_seats_until_stable_part_two() 6
+    assert_eq self.grid.occupied_seats_count() 26
