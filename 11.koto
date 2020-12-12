@@ -1,10 +1,8 @@
 # https://adventofcode.com/2020/day/11
 
-import io, koto, list, os, string.print, test.assert_eq, thread
+import enum.make_enum, io, koto, list, os, string.print, test.assert_eq, thread
 
-floor = 0
-empty = 1
-occupied = 2
+cell = make_enum "floor" "empty" "occupied"
 
 directions =
   num2 -1 -1, num2 0 -1, num2 1 -1,
@@ -19,9 +17,9 @@ make_floor_grid = |input|
         .chars()
         .each |c|
           match c
-            "." then floor
-            "L" then empty
-            "#" then occupied
+            "." then cell.floor
+            "L" then cell.empty
+            "#" then cell.occupied
         .to_list()
       (grid + row, row_count + 1, row.size())
 
@@ -59,7 +57,7 @@ make_floor_grid = |input|
           for x in 0..row_size
             index = y_index + x
             state = grid[index]
-            if state == floor then continue
+            if state == cell.floor then continue
 
             occupied_count = 0
             for direction in directions
@@ -69,16 +67,16 @@ make_floor_grid = |input|
               dy = y + direction[1]
               if not (0 <= dy < row_count)
                 continue
-              if grid[dy * row_size + dx] == occupied
+              if grid[dy * row_size + dx] == cell.occupied
                 occupied_count += 1
 
-            temp_grid[index] = match
-              state == empty and occupied_count == 0
+            temp_grid[index] = match state
+              cell.empty if occupied_count == 0
                 state_changed = true
-                occupied
-              state == occupied and occupied_count >= 4
+                cell.occupied
+              cell.occupied if occupied_count >= 4
                 state_changed = true
-                empty
+                cell.empty
               else state
         state_changed
 
@@ -95,7 +93,7 @@ make_floor_grid = |input|
           for x in 0..row_size
             index = y_index + x
             state = grid[index]
-            if state == floor then continue
+            if state == cell.floor then continue
 
             occupied_count = 0
             for direction in directions
@@ -107,21 +105,20 @@ make_floor_grid = |input|
                 dy += direction[1]
                 if not 0 <= dy < row_count
                   break
-                dstate = grid[dy * row_size + dx]
-                match
-                  dstate == empty
+                match grid[dy * row_size + dx]
+                  cell.empty
                     break
-                  dstate == occupied
+                  cell.occupied
                     occupied_count += 1
                     break
 
-            temp_grid[index] = match
-              state == empty and occupied_count == 0
+            temp_grid[index] = match state
+              cell.empty if occupied_count == 0
                 state_changed = true
-                occupied
-              state == occupied and occupied_count >= 5
+                cell.occupied
+              cell.occupied if occupied_count >= 5
                 state_changed = true
-                empty
+                cell.empty
               else state
         state_changed
 
@@ -140,7 +137,7 @@ make_floor_grid = |input|
 
     occupied_seats_count: |self|
       self.grid
-        .keep |position| position == occupied
+        .keep |position| position == cell.occupied
         .count()
 
     to_string: |self|
@@ -148,9 +145,9 @@ make_floor_grid = |input|
       for y in 0..self.row_count
         for x in 0..self.row_size
           result += match self.grid[y * self.row_size + x]
-            z if z == floor then "."
-            z if z == empty then "L"
-            z if z == occupied then "#"
+            cell.floor then "."
+            cell.empty then "L"
+            cell.occupied then "#"
         result += "\n"
 
 export main = ||
