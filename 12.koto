@@ -1,0 +1,69 @@
+# https://adventofcode.com/2020/day/12
+
+import io, koto, string.print, test.assert_eq
+
+north = num2 0 1
+south = num2 0 -1
+east  = num2 1 0
+west  = num2 -1 0
+
+parse_instructions = |input|
+  input.lines()
+    .each |line|
+      action = line.slice 0 1
+      value = line.slice(1).to_number()
+      action, value
+    .to_tuple()
+
+rotate_clockwise = |xy, degrees|
+  match degrees
+    90 then num2 xy[1] -xy[0]
+    180 then -xy
+    270 then num2 -xy[1] xy[0]
+
+run_instructions_part_one = |instructions|
+  ship, direction = (num2 0 0), east
+  for action, value in instructions
+    match action
+      "N" then ship += north * value
+      "S" then ship += south * value
+      "E" then ship += east * value
+      "W" then ship += west * value
+      "L" then direction = rotate_clockwise direction (360 - value)
+      "R" then direction = rotate_clockwise direction value
+      "F" then ship += direction * value
+  ship[0].abs() + ship[1].abs()
+
+run_instructions_part_two = |instructions|
+  ship, waypoint = (num2 0 0), (num2 10 1)
+  for action, value in instructions
+    match action
+      "N" then waypoint += north * value
+      "S" then waypoint += south * value
+      "E" then waypoint += east * value
+      "W" then waypoint += west * value
+      "L" then waypoint = rotate_clockwise waypoint (360 - value)
+      "R" then waypoint = rotate_clockwise waypoint value
+      "F" then ship += waypoint * value
+  ship[0].abs() + ship[1].abs()
+
+export main = ||
+  instructions = parse_instructions (io.read_to_string koto.script_dir + "./input/12")
+  print "Part one: {}" (run_instructions_part_one instructions) # 319
+  print "Part two: {}" (run_instructions_part_two instructions) # 50157
+
+export tests =
+  pre_test: |self|
+    self.instructions = parse_instructions "\
+F10
+N3
+F7
+R90
+F11
+"
+
+  test_part_one: |self|
+    assert_eq (run_instructions_part_one self.instructions) 25
+
+  test_part_two: |self|
+    assert_eq (run_instructions_part_two self.instructions) 286
