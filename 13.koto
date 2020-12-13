@@ -1,0 +1,88 @@
+# https://adventofcode.com/2020/day/13
+
+import io, koto, string.print, test.assert_eq
+
+parse_bus_notes = |input|
+  lines = input.lines()
+  start_time = lines.next().to_number()
+  bus_ids_and_offsets = lines.next()
+    .split ","
+    .enumerate()
+    .keep |(_, id)| id != "x"
+    .each |(index, id)| id.to_number(), index
+    .to_tuple()
+  start_time, bus_ids_and_offsets
+
+wait_time_for_next_bus = |bus_ids, start_time|
+  time = start_time
+  loop
+    for id, _ in bus_ids
+      if time % id == 0
+        return id, time - start_time
+    time += 1
+
+find_contest_time = |bus_ids|
+  # Uses the Chinese Remainder Theorem to find the correct time
+
+  mul_inv = |x, y|
+    if y == 1 then return 1
+
+    y0 = y
+    x0, x1 = 0, 1
+
+    while x > 1
+      q = (x / y).floor()
+      x, y = y, x % y
+      x0, x1 = x1 - q * x0, x0
+
+    if x1 < 0
+      x1 + y0
+    else
+      x1
+
+  id_product = bus_ids.fold 1 |x, (id, _)| x *= id
+
+  sum = bus_ids.fold 0 |x, (id, offset)|
+    p = id_product / id
+    mi = mul_inv(p, id)
+    x += offset * mi * p
+
+  id_product - sum % id_product
+
+export main = ||
+  start_time, bus_ids = parse_bus_notes (io.read_to_string koto.script_dir + "./input/13")
+
+  bus, wait_time = (wait_time_for_next_bus bus_ids start_time)
+  print "Part one: {}" (bus * wait_time) # 2935
+
+  # TODO This gives the wrong result, most likely due to the f64 integer precision range
+  print "Part two: {}" (find_contest_time bus_ids)
+
+export tests =
+  pre_test: |self|
+    bus_notes = parse_bus_notes "\
+939
+7,13,x,x,59,x,31,19
+"
+    self.start_time = bus_notes[0]
+    self.bus_ids = bus_notes[1]
+
+  test_part_one: |self|
+    bus, wait_time = (wait_time_for_next_bus self.bus_ids self.start_time)
+    assert_eq bus 59
+    assert_eq wait_time 5
+
+  test_part_two: |self|
+    assert_eq (find_contest_time self.bus_ids) 1068781
+
+    _, bus_ids = parse_bus_notes "\
+123
+17,x,13,19
+"
+    assert_eq (find_contest_time bus_ids) 3417
+
+    _, bus_ids = parse_bus_notes "\
+123
+1789,37,47,1889
+"
+    assert_eq (find_contest_time bus_ids) 1202161486
