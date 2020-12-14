@@ -1,0 +1,122 @@
+# https://adventofcode.com/2020/day/14
+
+import enum.make_enum, io, koto, string.print, test.assert_eq
+
+commands = make_enum "mask" "mem"
+
+int_to_bits = |n, bit_count|
+  # Assuming n < 2.pow bit_count
+  x = 2.pow (bit_count - 1)
+  for _ in 0..bit_count
+    yield (n / x).floor()
+    n %= x
+    x /= 2
+
+bits_to_int = |bits|
+  initial_multiplier = 2.pow (bits.size() - 1)
+  result, _ = bits.fold (0, initial_multiplier) |(sum, multiplier), bit|
+    sum += bit * multiplier
+    multiplier = (multiplier / 2).floor()
+    sum, multiplier
+  result
+
+parse_program = |input|
+  input.lines()
+    .each |line|
+      words = line.split " "
+      match words.next()
+        "mask"
+          words.next() # =
+          mask = words.next()
+            .chars()
+            .each |c|
+              match c
+                "X" then ()
+                "0" then 0
+                "1" then 1
+            .to_tuple()
+          commands.mask, mask, ()
+        mem
+          # e.g. mem[43816]
+          index = mem
+            .slice 4
+            .split "]"
+            .next()
+            .to_number()
+          words.next() # =
+          value = words.next().to_number()
+          commands.mem, index, value
+    .to_tuple()
+
+apply_mask_to_value = |value, mask|
+  value_bits = int_to_bits value 36
+  bits_to_int value_bits
+    .zip(mask)
+    .each |(value_bit, mask_bit)|
+      if mask_bit == ()
+        value_bit
+      else
+        mask_bit
+    .to_tuple()
+
+index_decoder = |index, mask|
+  decoded, floating_bits = (int_to_bits index 36)
+    .zip(mask)
+    .fold ([], []) |(result, floating_bits), (index_bit, mask_bit)|
+      result.push match mask_bit
+        0 then index_bit
+        1 then 1
+        () then floating_bits.push result.size()
+      result, floating_bits
+  floating_count = floating_bits.size()
+
+  bit_permutations = (0..2.pow floating_count)
+    .each |n| int_to_bits n floating_count
+  for bit_permutation in bit_permutations
+    for i, bit in floating_bits.zip bit_permutation
+      decoded[i] = bit
+    yield bits_to_int decoded
+
+run_program = |program, version|
+  memory = {}
+  mask = ()
+  for command, value_1, value_2 in program
+    match command
+      commands.mask then mask = value_1
+      commands.mem
+        index, value = value_1, value_2
+        match version
+          1 then
+            memory.insert index (apply_mask_to_value value mask)
+          2 then
+            for decoded_index in index_decoder index mask
+              memory.insert decoded_index value
+
+  # The program result is the sum of all values in memory
+  memory.values().fold 0 |result, value| result += value
+
+
+export main = ||
+  program = parse_program (io.read_to_string koto.script_dir + "./input/14")
+
+  print "Part one: {}" (run_program program 1) # 4297467072083
+  print "Part two: {}" (run_program program 2) # 5030603328768
+
+export tests =
+  test_part_one: ||
+    program = parse_program "\
+mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+mem[8] = 11
+mem[7] = 101
+mem[8] = 0
+"
+    assert_eq (run_program program 1) 165
+
+  test_part_two: ||
+    program = parse_program "\
+mask = 000000000000000000000000000000X1001X
+mem[42] = 100
+mask = 00000000000000000000000000000000X0XX
+mem[26] = 1
+"
+    assert_eq (run_program program 2) 208
