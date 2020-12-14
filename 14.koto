@@ -25,7 +25,8 @@ parse_program = |input|
     .each |line|
       words = line.split " "
       match words.next()
-        "mask"
+        "mask" then
+          # e.g. mask = 0110xx10...
           words.next() # =
           mask = words.next()
             .chars()
@@ -36,8 +37,8 @@ parse_program = |input|
                 "1" then 1
             .to_tuple()
           commands.mask, mask, ()
-        mem
-          # e.g. mem[43816]
+        mem then
+          # e.g. mem[43816] = 123
           index = mem
             .slice 4
             .split "]"
