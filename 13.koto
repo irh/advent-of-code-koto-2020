@@ -43,7 +43,7 @@ find_contest_time = |bus_ids|
   id_product = bus_ids.fold 1 |x, (id, _)| x *= id
 
   sum = bus_ids.fold 0 |x, (id, offset)|
-    p = id_product / id
+    p = (id_product / id).floor()
     mi = mul_inv(p, id)
     x += offset * mi * p
 
@@ -54,9 +54,7 @@ export main = ||
 
   bus, wait_time = (wait_time_for_next_bus bus_ids start_time)
   print "Part one: {}" (bus * wait_time) # 2935
-
-  # TODO This gives the wrong result, most likely due to the f64 integer precision range
-  print "Part two: {}" (find_contest_time bus_ids)
+  print "Part two: {}" (find_contest_time bus_ids) # 836024966345345
 
 export tests =
   pre_test: |self|
