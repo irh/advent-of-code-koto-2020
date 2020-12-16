@@ -1,0 +1,48 @@
+# https://adventofcode.com/2020/day/14
+
+import io, koto, list, string.print, test.assert_eq
+
+play_game = |start_numbers, turn_count|
+  last_number = ()
+  turn = 1
+  numbers = list.with_size (turn_count) ()
+
+  # Work through the start numbers
+  for n in start_numbers
+    numbers[n] = [turn]
+    turn += 1
+    last_number = n
+
+  # Now play the game for the specified number of turns
+  for _ in 0..turn_count - start_numbers.size()
+    spoken_number = match numbers[last_number]
+      () or [_] then 0
+      [y, z] then z - y
+
+    match numbers[spoken_number]
+      () then
+        numbers[spoken_number] = [turn]
+      turns if turns.size() == 1
+        turns.push turn
+      turns
+        turns[0] = turns[1]
+        turns[1] = turn
+
+    turn += 1
+    last_number = spoken_number
+  last_number
+
+
+export main = ||
+  start_numbers = (8, 11, 0, 19, 1, 2)
+
+  print "Part one: {}" (play_game start_numbers 2020) # 447
+  print "Part two: {}" (play_game start_numbers 30000000) # 11721679
+
+export tests =
+  test_part_one: ||
+    assert_eq (play_game (0, 3, 6) 2020) 436
+
+  # This takes a while to run (~30s)
+  # test_part_two: ||
+  #   assert_eq (play_game (0, 3, 6) 30000000) 175594
