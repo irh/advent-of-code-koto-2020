@@ -1,0 +1,122 @@
+# https://adventofcode.com/2020/day/16
+
+import io, koto, string.print
+from test import assert, assert_eq
+
+parse_notes = |input|
+  fields = {}
+  lines = input.lines()
+  for line in lines
+    if line.is_empty() then break
+
+    # e.g.
+    # departure location: 32-615 or 626-955
+    sections = line.split ": "
+    category = sections.next()
+    rules = sections.next().split(" ")
+      .keep |word| word != "or"
+      .each |word|
+        bounds = word.split("-")
+        min = bounds.next().to_number()
+        max = bounds.next().to_number()
+        min..=max
+      .to_tuple()
+    fields.insert category {rules}
+
+  parse_ticket = |ticket|
+    ticket
+      .split ","
+      .each |n| n.to_number()
+      .to_tuple()
+
+  lines.next() # your ticket:
+
+  your_ticket = parse_ticket lines.next()
+
+  lines.next() #
+  lines.next() # nearby tickets:
+
+  nearby_tickets = lines.each(parse_ticket).to_tuple()
+
+  fields, your_ticket, nearby_tickets
+
+find_invalid_field = |ticket, fields|
+  for n in ticket
+    is_valid = fields.any |(_, field)|
+      field.rules
+        .any |rule| rule.contains n
+    if not is_valid
+      return n
+  ()
+
+scanning_error_rate = |fields, tickets|
+  tickets
+    .each |ticket|
+      match find_invalid_field ticket fields
+        () then 0
+        n then n
+    .sum()
+
+assign_field_ids = |fields, tickets|
+  # identify which tickets are valid
+  valid_tickets = tickets
+    .keep |ticket| (find_invalid_field ticket fields) == ()
+    .to_tuple()
+
+  # find out which fields could be a match for each column
+  column_count = fields.size()
+  for i in 0..column_count
+    for _, field in fields
+      could_be_a_match = valid_tickets.all |ticket|
+        n = ticket[i]
+        field.rules.any |rule| rule.contains n
+      if could_be_a_match
+        field.update "possible_ids" [] |possible_ids|
+          possible_ids.push i
+          possible_ids
+
+  # Assign field ids by sorting them in order of number of possibilities,
+  # the first field will have a single option which can be assigned,
+  # and then that possibility can be eliminated from the other fields.
+  pending_fields = fields.copy()
+  pending_fields.sort |_, field| field.possible_ids.size()
+  until pending_fields.is_empty()
+    name, field = pending_fields.get_index(0)
+    match field.possible_ids
+      [index] then
+        fields.get(name).id = index
+        pending_fields.remove name
+        for _, field in pending_fields
+          n_index = field.possible_ids.position |n| n == index
+          field.possible_ids.remove n_index
+      else assert false
+
+analyze_ticket = |ticket, fields|
+  result = fields
+    .keep |(name, _)| name.starts_with "departure"
+    .each |(_, field)| ticket[field.id]
+    .product()
+
+export main = ||
+  fields, your_ticket, nearby_tickets =
+    parse_notes (io.read_to_string koto.script_dir + "./input/16")
+
+  print "Part one: {}" (scanning_error_rate fields nearby_tickets) # 26053
+
+  assign_field_ids fields nearby_tickets
+  print "Part two: {}" (analyze_ticket your_ticket fields) # 1515506256421
+
+
+export tests =
+  test_part_one: ||
+    fields, your_ticket, nearby_tickets =
+      parse_notes (io.read_to_string koto.script_dir + "./input/16-example-1")
+    assert_eq (scanning_error_rate fields nearby_tickets) 71
+
+  test_part_two: ||
+    fields, your_ticket, nearby_tickets =
+      parse_notes (io.read_to_string koto.script_dir + "./input/16-example-2")
+    assign_field_ids fields nearby_tickets
+    assert_eq (fields.row.id) 0
+    assert_eq (fields.class.id) 1
+    assert_eq (fields.seat.id) 2
