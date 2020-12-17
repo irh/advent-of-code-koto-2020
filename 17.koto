@@ -1,0 +1,88 @@
+# https://adventofcode.com/2020/day/17
+
+import io, koto, string.print, test.assert_eq
+
+generate_local_3d = ||
+  origin = num4 0
+  for x in -1..=1
+    for y in -1..=1
+      for z in -1..=1
+        position = num4 x y z
+        if position != origin
+          yield position
+
+generate_local_4d = ||
+  origin = num4 0
+  for x in -1..=1
+    for y in -1..=1
+      for z in -1..=1
+        for w in -1..=1
+          position = num4 x y z w
+          if position != origin
+            yield position
+
+local_3d = generate_local_3d().to_tuple()
+local_4d = generate_local_4d().to_tuple()
+
+
+parse_grid = |input|
+  input.lines().enumerate()
+    .fold {} |grid, (y, line)|
+      line.chars().enumerate()
+        .fold grid |grid, (x, c)|
+          if c == "#"
+            grid.insert (num4 x y)
+          grid
+
+
+cycle_grid = |grid, local_positions|
+  positions_to_check = grid.fold {} |result, (position, _)|
+    result.insert position
+    for local in local_positions
+      result.insert (position + local)
+    result
+
+  positions_to_check.fold {} |result, (position, _)|
+    active_neighbours = local_positions
+      .keep |local| grid.contains_key(position + local)
+      .count()
+    cube_is_active = match active_neighbours
+      3 then true
+      2 if grid.contains_key(position) then true
+      else false
+    if cube_is_active
+      result.insert position 1
+    result
+
+
+cycle_grid_3d = |grid|
+  for _ in 0..6
+    grid = cycle_grid grid local_3d
+  grid.size()
+
+cycle_grid_4d = |grid|
+  for _ in 0..6
+    grid = cycle_grid grid local_4d
+  grid.size()
+
+
+export main = ||
+  grid = parse_grid (io.read_to_string koto.script_dir + "./input/17")
+
+  print "Part one: {}" (cycle_grid_3d grid.deep_copy()) # 382
+  print "Part two: {}" (cycle_grid_4d grid) # 2552
+
+
+export tests =
+  pre_test: |self|
+    self.grid = parse_grid "\
+.#.
+..#
+###
+"
+
+  test_part_one: |self|
+    assert_eq (cycle_grid_3d self.grid) 112
+
+  test_part_two: |self|
+    assert_eq (cycle_grid_4d self.grid) 848
