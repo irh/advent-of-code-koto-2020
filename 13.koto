@@ -40,12 +40,16 @@ find_contest_time = |bus_ids|
     else
       x1
 
-  id_product = bus_ids.fold 1 |x, (id, _)| x *= id
+  id_product = bus_ids
+    .each |(id, _)| id
+    .product()
 
-  sum = bus_ids.fold 0 |x, (id, offset)|
-    p = (id_product / id).floor()
-    mi = mul_inv(p, id)
-    x += offset * mi * p
+  sum = bus_ids
+    .each |(id, offset)|
+      p = (id_product / id).floor()
+      mi = mul_inv(p, id)
+      offset * mi * p
+    .sum()
 
   id_product - sum % id_product
 

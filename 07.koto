@@ -36,9 +36,9 @@ count_bag_options = |target_bag, rules|
 count_contained_bags = |bag, rules|
   rules
     .get bag
-    .fold 0 |result, (contained_bag, count)|
-      extra_bags = count + count * (count_contained_bags contained_bag rules)
-      result + extra_bags
+    .each |(contained_bag, count)|
+      count + count * (count_contained_bags contained_bag rules)
+    .sum()
 
 export main = ||
   rules = parse_bag_rules (io.read_to_string koto.script_dir + "./input/07")

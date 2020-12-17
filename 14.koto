@@ -94,7 +94,7 @@ run_program = |program, version|
               memory.insert decoded_index value
 
   # The program result is the sum of all values in memory
-  memory.values().fold 0 |result, value| result += value
+  memory.values().sum()
 
 
 export main = ||
