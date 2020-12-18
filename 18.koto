@@ -23,18 +23,24 @@ peekable_tokens = |expression|
 
 evaluate_expression = |tokens, ops, min_priority|
   lhs = ()
+  # Consume tokens until the end of the expression or an
+  # operator with insufficient priority is reached.
   loop
+    # Peek the next token to see if it should be consumed as part of this expression
     token = tokens.peek()
     match token
       () or ")" then break
       "(" then
         tokens.next()
+        # Parse the nested expression, starting with minimum priority of 0
         lhs = evaluate_expression tokens ops 0
         assert_eq tokens.next() ")" # consume the end )
       peeked_op if ops.contains_key peeked_op
+        # Check if the op has sufficient priority to continue
         left_priority, right_priority = ops.get peeked_op
         if left_priority < min_priority
           break
+        # Consume the op token and evaluate the rhs
         tokens.next()
         op = peeked_op
         rhs = evaluate_expression tokens ops right_priority
@@ -49,13 +55,17 @@ evaluate_expression = |tokens, ops, min_priority|
 
 evaluate_1 = |input|
   # + and * have the same priority
-  ops = {"*": (1, 2), "+": (1, 2)}
+  ops =
+    "*": (1, 2)
+    "+": (1, 2)
   tokens = peekable_tokens input
   evaluate_expression tokens ops 0
 
 evaluate_2 = |input|
   # + has higher priority than *
-  ops = {"*": (1, 2), "+": (3, 4)}
+  ops =
+    "*": (1, 2)
+    "+": (3, 4)
   tokens = peekable_tokens input
   evaluate_expression tokens ops 0
 
