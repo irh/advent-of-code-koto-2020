@@ -1,0 +1,86 @@
+# https://adventofcode.com/2020/day/18
+
+import io, koto, string.print, test.assert_eq
+
+
+peekable_tokens = |expression|
+  iter: expression.chars().keep(|c| c != " ")
+  peeked: ()
+
+  next: |self|
+    if self.peeked == ()
+      self.iter.next()
+    else
+      result = self.peeked
+      self.peeked = ()
+      result
+
+  peek: |self|
+    if self.peeked == ()
+      self.peeked = self.iter.next()
+    self.peeked
+
+
+evaluate_expression = |tokens, ops, min_priority|
+  lhs = ()
+  loop
+    token = tokens.peek()
+    match token
+      () or ")" then break
+      "(" then
+        tokens.next()
+        lhs = evaluate_expression tokens ops 0
+        assert_eq tokens.next() ")" # consume the end )
+      peeked_op if ops.contains_key peeked_op
+        left_priority, right_priority = ops.get peeked_op
+        if left_priority < min_priority
+          break
+        tokens.next()
+        op = peeked_op
+        rhs = evaluate_expression tokens ops right_priority
+        lhs = match op
+          "+" then lhs + rhs
+          "*" then lhs * rhs
+      n then
+        tokens.next()
+        lhs = n.to_number()
+  lhs
+
+
+evaluate_1 = |input|
+  # + and * have the same priority
+  ops = {"*": (1, 2), "+": (1, 2)}
+  tokens = peekable_tokens input
+  evaluate_expression tokens ops 0
+
+evaluate_2 = |input|
+  # + has higher priority than *
+  ops = {"*": (1, 2), "+": (3, 4)}
+  tokens = peekable_tokens input
+  evaluate_expression tokens ops 0
+
+
+export main = ||
+  expressions = (io.read_to_string koto.script_dir + "./input/18").lines().to_tuple()
+
+  part_one = expressions
+    .each |expression| evaluate_1 expression
+    .sum()
+  print "Part one: {}" part_one # 45840336521334
+
+  part_two = expressions
+    .each |expression| evaluate_2 expression
+    .sum()
+  print "Part two: {}" part_two # 328920644404583
+
+
+export tests =
+  test_part_one: |self|
+    assert_eq (evaluate_1 "1 + 2 * 3 + 4 * 5 + 6") 71
+    assert_eq (evaluate_1 "1 + (2 * 3) + (4 * (5 + 6))") 51
+    assert_eq (evaluate_1 "((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2") 13632
+
+  test_part_two: |self|
+    assert_eq (evaluate_2 "1 + 2 * 3 + 4 * 5 + 6") 231
+    assert_eq (evaluate_2 "1 + (2 * 3) + (4 * (5 + 6))") 51
+    assert_eq (evaluate_2 "((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2") 23340
