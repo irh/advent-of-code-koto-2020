@@ -1,0 +1,123 @@
+# https://adventofcode.com/2020/day/19
+
+import io.print
+from test import assert, assert_eq
+
+
+parse_input = |input|
+  rules = {}
+  lines = input.lines()
+  for line in lines
+    if line.is_empty() then break
+    id, rest = line.split(":").to_tuple()
+    id = id.to_number()
+    rest = rest.trim()
+    first_char = rest.chars().next()
+    match first_char
+      "\"" then
+        char = rest.slice 1, (rest.size() - 1)
+        rules.insert id, {char}
+      else
+        sequences = []
+        sequence = []
+        for token in rest.split " "
+          match token
+            "|" then
+              sequences.push sequence.copy()
+              sequence.clear()
+            else
+              sequence.push token.to_number()
+        sequences.push sequence
+        rules.insert id, {sequences}
+
+  messages = lines.to_tuple()
+  rules, messages
+
+
+message_checker = |rules|
+  rules: rules
+
+  check_message: |self, message|
+    self.match_rules message, [0]
+
+  match_rules: |self, message, rule_ids|
+    match rule_ids.is_empty(), message.is_empty()
+      true, true
+        return true
+      true, false or false, true
+        return false
+
+    rule_id = rule_ids.remove 0
+    rule = self.rules.get rule_id
+    match rule.get "sequences"
+      ()
+        char = rule.get "char"
+        self.match_char char, message, rule_ids
+      [sequence]
+        self.match_sequence sequence, message, rule_ids
+      [sequence_a, sequence_b]
+        self.match_sequence(sequence_a, message, rule_ids)
+          or self.match_sequence(sequence_b, message, rule_ids)
+      else
+        throw "Unsupported rule"
+
+  match_char: |self, char, message, rule_ids|
+    match message.chars().next()
+      c if c == char
+        # TODO 'remaining_message = message[1..]' should be allowed here
+        remaining_message = if message.size() > 1 then message[1..] else ""
+        self.match_rules remaining_message, rule_ids
+      _ then false
+
+  match_sequence: |self, sequence, message, remaining_ids|
+    combined_ids = sequence + remaining_ids
+    self.match_rules message, combined_ids
+
+
+valid_message_count = |rules, messages|
+  checker = message_checker rules
+  messages
+    .keep |message| checker.check_message message
+    .count()
+
+
+update_rules = |rules|
+  rules.insert 8, {sequences: [[42], [42, 8]]}
+  rules.insert 11, {sequences: [[42, 31], [42, 11, 31]]}
+
+
+export main = ||
+  rules, messages = parse_input io.read_to_string koto.script_dir + "./input/19"
+  print "Part one: {}", (valid_message_count rules, messages) # 279
+  update_rules rules
+  print "Part two: {}", (valid_message_count rules, messages) # 384
+
+
+export @tests =
+  @test part_one: |self|
+    rules, messages =
+      parse_input io.read_to_string koto.script_dir + "./input/19-example-1"
+    checker = message_checker rules
+    assert checker.check_message "ababbb"
+    assert checker.check_message "abbbab"
+    assert not checker.check_message "bababa"
+    assert not checker.check_message "aaabbb"
+    assert not checker.check_message "aaaabbb"
+    assert_eq (valid_message_count rules, messages), 2
+
+  @test part_two: |self|
+    rules, messages =
+      parse_input io.read_to_string koto.script_dir + "./input/19-example-2"
+    assert_eq (valid_message_count rules, messages), 3
+
+    update_rules rules
+
+    checker = message_checker rules
+    assert checker.check_message "bbabbbbaabaabba"
+    assert checker.check_message "ababaaaaaabaaab"
+    assert checker.check_message "ababaaaaabbbaba"
+    assert checker.check_message "babbbbaabbbbbabbbbbbaabaaabaaa"
+    assert checker.check_message "aaaaabbaabaaaaababaa"
+    assert checker.check_message "aaabbbbbbaaaabaababaabababbabaaabbababababaaa"
+    assert not checker.check_message "aaaabbaaaabbaaa"
+    assert_eq (valid_message_count rules, messages), 12
