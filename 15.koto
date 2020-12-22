@@ -5,7 +5,7 @@ import io, koto, list, string.print, test.assert_eq
 play_game = |start_numbers, turn_count|
   last_number = ()
   turn = 1
-  numbers = list.with_size (turn_count) ()
+  numbers = list.with_size turn_count, ()
 
   # Work through the start numbers
   for n in start_numbers
@@ -36,13 +36,13 @@ play_game = |start_numbers, turn_count|
 export main = ||
   start_numbers = (8, 11, 0, 19, 1, 2)
 
-  print "Part one: {}" (play_game start_numbers 2020) # 447
-  print "Part two: {}" (play_game start_numbers 30000000) # 11721679
+  print "Part one: {}", (play_game start_numbers, 2020) # 447
+  print "Part two: {}", (play_game start_numbers, 30000000) # 11721679
 
 export tests =
   test_part_one: ||
-    assert_eq (play_game (0, 3, 6) 2020) 436
+    assert_eq (play_game (0, 3, 6), 2020), 436
 
   # This takes a while to run (~30s)
   # test_part_two: ||
-  #   assert_eq (play_game (0, 3, 6) 30000000) 175594
+  #   assert_eq (play_game (0, 3, 6), 30000000), 175594

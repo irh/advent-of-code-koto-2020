@@ -35,10 +35,10 @@ export main = ||
   expenses = parse_expenses input
 
   part_one = product_of_two_expenses_that_sum_to_2020 expenses
-  print "Part one: {}" part_one # 974304
+  print "Part one: {}", part_one # 974304
 
   part_two = product_of_three_expenses_that_sum_to_2020 expenses
-  print "Part two: {}" part_two # 236430480
+  print "Part two: {}", part_two # 236430480
 
 
 export tests =
@@ -54,9 +54,9 @@ export tests =
   test_part_one: |self|
     expenses = parse_expenses self.input
     result = product_of_two_expenses_that_sum_to_2020 expenses
-    assert_eq result 514579
+    assert_eq result, 514579
 
   test_part_two: |self|
     expenses = parse_expenses self.input
     result = product_of_three_expenses_that_sum_to_2020 expenses
-    assert_eq result 241861950
+    assert_eq result, 241861950

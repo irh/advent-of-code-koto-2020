@@ -26,22 +26,21 @@ count_answers_part_two = |answers|
   people_in_group = 0
   for line in answers.lines()
     if line.is_empty()
-      result += count_for_group people_in_group answers_for_group
+      result += count_for_group people_in_group, answers_for_group
       answers_for_group = {}
       people_in_group = 0
     else
       people_in_group += 1
       for answer in line
-        answers_for_group.update answer 0
-          |count| count + 1
-  result += count_for_group people_in_group answers_for_group
+        answers_for_group.update answer, 0, |count| count + 1
+  result += count_for_group people_in_group, answers_for_group
   result
 
 export main = ||
-  input = (io.read_to_string koto.script_dir + "./input/06")
+  input = io.read_to_string koto.script_dir + "./input/06"
 
-  print "Part one: {}" (count_answers_part_one input) # 6903
-  print "Part two: {}" (count_answers_part_two input) # 3493
+  print "Part one: {}", (count_answers_part_one input) # 6903
+  print "Part two: {}", (count_answers_part_two input) # 3493
 
 export tests =
   pre_test: |self|
@@ -63,7 +62,7 @@ a
 b"
 
   test_part_one: |self|
-    assert_eq (count_answers_part_one self.input) 11
+    assert_eq (count_answers_part_one self.input), 11
 
   test_part_two: |self|
-    assert_eq (count_answers_part_two self.input) 6
+    assert_eq (count_answers_part_two self.input), 6

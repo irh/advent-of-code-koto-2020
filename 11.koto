@@ -2,17 +2,17 @@
 
 import enum.make_enum, io, koto, list, os, string.print, test.assert_eq, thread
 
-cell = make_enum "floor" "empty" "occupied"
+cell = make_enum "floor", "empty", "occupied"
 
 directions =
-  num2 -1 -1, num2 0 -1, num2 1 -1,
-  num2 -1  0,            num2 1  0,
-  num2 -1  1, num2 0  1, num2 1  1,
+  (num2 -1, -1), (num2 0, -1), (num2 1, -1),
+  (num2 -1,  0),               (num2 1,  0),
+  (num2 -1,  1), (num2 0,  1), (num2 1,  1),
 
 make_floor_grid = |input|
   grid, row_count, row_size = input
     .lines()
-    .fold ([], 0, 0) |(grid, row_count, _), line|
+    .fold ([], 0, 0), |(grid, row_count, _), line|
       row = line
         .chars()
         .each |c|
@@ -35,13 +35,13 @@ make_floor_grid = |input|
       batch_size = row_count / worker_count
       workers = (0..worker_count)
         .each |worker_index|
-          thread.create || filling_logic worker_index batch_size
+          thread.create || filling_logic worker_index, batch_size
         .to_tuple()
 
-      state_changed = workers.fold false |result, worker|
+      state_changed = workers.fold false, |result, worker|
         worker.join() or result
 
-      list.swap self.grid self.temp_grid
+      list.swap self.grid, self.temp_grid
       state_changed
 
     fill_seats_part_one: |self|
@@ -151,17 +151,17 @@ make_floor_grid = |input|
         result += "\n"
 
 export main = ||
-  grid = make_floor_grid (io.read_to_string koto.script_dir + "./input/11")
+  grid = make_floor_grid io.read_to_string koto.script_dir + "./input/11"
 
   part_one = grid.deep_copy()
   print "Part one"
-  print "- seats stabilised in {} steps" part_one.fill_seats_until_stable_part_one()
-  print "- occupied seats: {}" part_one.occupied_seats_count() # 2261
+  print "- seats stabilised in {} steps", part_one.fill_seats_until_stable_part_one()
+  print "- occupied seats: {}", part_one.occupied_seats_count() # 2261
 
   part_two = grid
   print "Part two"
-  print "- seats stabilised in {} steps" part_two.fill_seats_until_stable_part_two()
-  print "- occupied seats: {}" part_two.occupied_seats_count() # 2039
+  print "- seats stabilised in {} steps", part_two.fill_seats_until_stable_part_two()
+  print "- occupied seats: {}", part_two.occupied_seats_count() # 2039
 
 export tests =
   pre_test: |self|
@@ -179,9 +179,9 @@ L.LLLLL.LL
 "
 
   test_part_one: |self|
-    assert_eq self.grid.fill_seats_until_stable_part_one() 5
-    assert_eq self.grid.occupied_seats_count() 37
+    assert_eq self.grid.fill_seats_until_stable_part_one(), 5
+    assert_eq self.grid.occupied_seats_count(), 37
 
   test_part_two: |self|
-    assert_eq self.grid.fill_seats_until_stable_part_two() 6
-    assert_eq self.grid.occupied_seats_count() 26
+    assert_eq self.grid.fill_seats_until_stable_part_two(), 6
+    assert_eq self.grid.occupied_seats_count(), 26

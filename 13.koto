@@ -54,11 +54,11 @@ find_contest_time = |bus_ids|
   id_product - sum % id_product
 
 export main = ||
-  start_time, bus_ids = parse_bus_notes (io.read_to_string koto.script_dir + "./input/13")
+  start_time, bus_ids = parse_bus_notes io.read_to_string koto.script_dir + "./input/13"
 
-  bus, wait_time = (wait_time_for_next_bus bus_ids start_time)
-  print "Part one: {}" (bus * wait_time) # 2935
-  print "Part two: {}" (find_contest_time bus_ids) # 836024966345345
+  bus, wait_time = (wait_time_for_next_bus bus_ids, start_time)
+  print "Part one: {}", (bus * wait_time) # 2935
+  print "Part two: {}", (find_contest_time bus_ids) # 836024966345345
 
 export tests =
   pre_test: |self|
@@ -70,21 +70,21 @@ export tests =
     self.bus_ids = bus_notes[1]
 
   test_part_one: |self|
-    bus, wait_time = (wait_time_for_next_bus self.bus_ids self.start_time)
-    assert_eq bus 59
-    assert_eq wait_time 5
+    bus, wait_time = (wait_time_for_next_bus self.bus_ids, self.start_time)
+    assert_eq bus, 59
+    assert_eq wait_time, 5
 
   test_part_two: |self|
-    assert_eq (find_contest_time self.bus_ids) 1068781
+    assert_eq (find_contest_time self.bus_ids), 1068781
 
     _, bus_ids = parse_bus_notes "\
 123
 17,x,13,19
 "
-    assert_eq (find_contest_time bus_ids) 3417
+    assert_eq (find_contest_time bus_ids), 3417
 
     _, bus_ids = parse_bus_notes "\
 123
 1789,37,47,1889
 "
-    assert_eq (find_contest_time bus_ids) 1202161486
+    assert_eq (find_contest_time bus_ids), 1202161486

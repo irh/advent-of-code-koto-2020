@@ -40,12 +40,12 @@ find_first_invalid_input = |input, buffer_size|
   buffer = ring_buffer buffer_size
   for i, n in input.enumerate()
     if buffer.size() == buffer_size
-      if not input_is_valid buffer n
+      if not input_is_valid buffer, n
         return n
     buffer.push n
 
 find_encryption_weakness = |input, buffer_size|
-  invalid = find_first_invalid_input input buffer_size
+  invalid = find_first_invalid_input input, buffer_size
   size = input.size()
   for i in 0..size
     sum = input[i]
@@ -56,9 +56,9 @@ find_encryption_weakness = |input, buffer_size|
         return min + max
 
 export main = ||
-  input = parse_input (io.read_to_string koto.script_dir + "./input/09")
-  print "Part one: {}" (find_first_invalid_input input 25) # 1930745883
-  print "Part two: {}" (find_encryption_weakness input 25) # 268878261
+  input = parse_input io.read_to_string koto.script_dir + "./input/09"
+  print "Part one: {}", (find_first_invalid_input input, 25) # 1930745883
+  print "Part two: {}", (find_encryption_weakness input, 25) # 268878261
 
 export tests =
   pre_test: |self|
@@ -94,20 +94,20 @@ export tests =
     for i in 21..=25
       buffer.push i
 
-    assert (input_is_valid buffer 26)
-    assert (input_is_valid buffer 49)
-    assert not (input_is_valid buffer 100)
-    assert not (input_is_valid buffer 50)
+    assert input_is_valid buffer, 26
+    assert input_is_valid buffer, 49
+    assert not input_is_valid buffer, 100
+    assert not input_is_valid buffer, 50
 
     buffer.push 45
-    assert (input_is_valid buffer 26)
-    assert not (input_is_valid buffer 65)
-    assert (input_is_valid buffer 64)
-    assert (input_is_valid buffer 66)
+    assert input_is_valid buffer, 26
+    assert not input_is_valid buffer, 65
+    assert input_is_valid buffer, 64
+    assert input_is_valid buffer, 66
 
   test_part_one_example_two: |self|
-    assert_eq (find_first_invalid_input self.input 5) 127
+    assert_eq (find_first_invalid_input self.input, 5), 127
 
   test_part_two: |self|
-    assert_eq (find_encryption_weakness self.input 5) 62
+    assert_eq (find_encryption_weakness self.input, 5), 62
 

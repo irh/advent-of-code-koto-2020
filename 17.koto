@@ -7,7 +7,7 @@ generate_local_3d = ||
   for x in -1..=1
     for y in -1..=1
       for z in -1..=1
-        position = num4 x y z
+        position = num4 x, y, z
         if position != origin
           yield position
 
@@ -17,7 +17,7 @@ generate_local_4d = ||
     for y in -1..=1
       for z in -1..=1
         for w in -1..=1
-          position = num4 x y z w
+          position = num4 x, y, z, w
           if position != origin
             yield position
 
@@ -27,22 +27,22 @@ local_4d = generate_local_4d().to_tuple()
 
 parse_grid = |input|
   input.lines().enumerate()
-    .fold {} |grid, (y, line)|
+    .fold {}, |grid, (y, line)|
       line.chars().enumerate()
-        .fold grid |grid, (x, c)|
+        .fold grid, |grid, (x, c)|
           if c == "#"
-            grid.insert (num4 x y)
+            grid.insert (num4 x, y)
           grid
 
 
 cycle_grid = |grid, local_positions|
-  positions_to_check = grid.fold {} |result, (position, _)|
+  positions_to_check = grid.fold {}, |result, (position, _)|
     result.insert position
-    local_positions.fold result |result, local|
+    local_positions.fold result, |result, local|
       result.insert (position + local)
       result
 
-  positions_to_check.fold {} |result, (position, _)|
+  positions_to_check.fold {}, |result, (position, _)|
     active_neighbours = local_positions
       .keep |local| grid.contains_key(position + local)
       .count()
@@ -57,20 +57,20 @@ cycle_grid = |grid, local_positions|
 
 cycle_grid_3d = |grid|
   for _ in 0..6
-    grid = cycle_grid grid local_3d
+    grid = cycle_grid grid, local_3d
   grid.size()
 
 cycle_grid_4d = |grid|
   for _ in 0..6
-    grid = cycle_grid grid local_4d
+    grid = cycle_grid grid, local_4d
   grid.size()
 
 
 export main = ||
-  grid = parse_grid (io.read_to_string koto.script_dir + "./input/17")
+  grid = parse_grid io.read_to_string koto.script_dir + "./input/17"
 
-  print "Part one: {}" (cycle_grid_3d grid.deep_copy()) # 382
-  print "Part two: {}" (cycle_grid_4d grid) # 2552
+  print "Part one: {}", cycle_grid_3d grid.deep_copy() # 382
+  print "Part two: {}", cycle_grid_4d grid # 2552
 
 
 export tests =
@@ -82,7 +82,7 @@ export tests =
 "
 
   test_part_one: |self|
-    assert_eq (cycle_grid_3d self.grid) 112
+    assert_eq (cycle_grid_3d self.grid), 112
 
   test_part_two: |self|
-    assert_eq (cycle_grid_4d self.grid) 848
+    assert_eq (cycle_grid_4d self.grid), 848

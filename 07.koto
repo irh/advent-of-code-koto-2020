@@ -9,7 +9,7 @@ parse_bag_rules = |input|
       # e.g. light red bags contain 1 bright white bag, 2 muted yellow bags.
       # e.g.  faded blue bags contain no other bags.
       words = line.split " "
-      bag = "{} {}".format words.next() words.next()
+      bag = "{} {}".format words.next(), words.next()
       words.next() # bags
       words.next() # contain
       contained_bags = {}
@@ -17,8 +17,8 @@ parse_bag_rules = |input|
         match words.next()
           "no" or () then break
           quantity
-            contained_bag = "{} {}".format words.next() words.next()
-            contained_bags.insert contained_bag quantity.to_number()
+            contained_bag = "{} {}".format words.next(), words.next()
+            contained_bags.insert contained_bag, quantity.to_number()
             words.next() # bag(s)
       bag, contained_bags
     .to_map()
@@ -37,14 +37,14 @@ count_contained_bags = |bag, rules|
   rules
     .get bag
     .each |(contained_bag, count)|
-      count + count * (count_contained_bags contained_bag rules)
+      count + count * count_contained_bags contained_bag, rules
     .sum()
 
 export main = ||
-  rules = parse_bag_rules (io.read_to_string koto.script_dir + "./input/07")
+  rules = parse_bag_rules io.read_to_string koto.script_dir + "./input/07"
 
-  print "Part one: {}" (count_bag_options "shiny gold" rules) # 272
-  print "Part two: {}" (count_contained_bags "shiny gold" rules) # 172246
+  print "Part one: {}", (count_bag_options "shiny gold", rules) # 272
+  print "Part two: {}", (count_contained_bags "shiny gold", rules) # 172246
 
 export tests =
   pre_test: |self|
@@ -62,11 +62,11 @@ dotted black bags contain no other bags.
 
   test_part_one: |self|
     rules = parse_bag_rules self.example_1
-    assert_eq (count_bag_options "shiny gold" rules) 4
+    assert_eq (count_bag_options "shiny gold", rules), 4
 
   test_part_two_example_1: |self|
     rules = parse_bag_rules self.example_1
-    assert_eq (count_contained_bags "shiny gold" rules) 32
+    assert_eq (count_contained_bags "shiny gold", rules), 32
 
   test_part_two_example_2: |self|
     rules = parse_bag_rules "\
@@ -78,4 +78,4 @@ dark green bags contain 2 dark blue bags.
 dark blue bags contain 2 dark violet bags.
 dark violet bags contain no other bags.
 "
-    assert_eq (count_contained_bags "shiny gold" rules) 126
+    assert_eq (count_contained_bags "shiny gold", rules), 126

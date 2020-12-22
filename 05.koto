@@ -7,7 +7,7 @@ upper_half = |r| r.start() + r.size() / 2..r.end()
 
 partition = |input, lower, max|
   input
-    .fold 0..max |range, c|
+    .fold 0..max, |range, c|
       if c == lower
         lower_half range
       else
@@ -15,12 +15,12 @@ partition = |input, lower, max|
     .start()
 
 seat_id = |seat_code|
-  row = partition seat_code.take(7) "F" 128
-  col = partition seat_code.skip(7) "L" 8
+  row = partition seat_code.take(7), "F", 128
+  col = partition seat_code.skip(7), "L", 8
   row * 8 + col
 
 find_missing_seat = |sorted_seat_ids|
-  for a, b in sorted_seat_ids.zip(sorted_seat_ids.skip 1)
+  for a, b in sorted_seat_ids.zip sorted_seat_ids.skip 1
     if b - a == 2
       return b - 1
 
@@ -31,12 +31,12 @@ export main = ||
     .to_list()
   seat_ids.sort()
 
-  print "Part one: {}" seat_ids.last() # 976
-  print "Part two: {}" (find_missing_seat seat_ids) # 685
+  print "Part one: {}", seat_ids.last() # 976
+  print "Part two: {}", find_missing_seat seat_ids # 685
 
 export tests =
   test_part_one: ||
-    assert_eq (seat_id "FBFBBFFRLR") 357
-    assert_eq (seat_id "BFFFBBFRRR") 567
-    assert_eq (seat_id "FFFBBBFRRR") 119
-    assert_eq (seat_id "BBFFBBFRLL") 820
+    assert_eq (seat_id "FBFBBFFRLR"), 357
+    assert_eq (seat_id "BFFFBBFRRR"), 567
+    assert_eq (seat_id "FFFBBBFRRR"), 119
+    assert_eq (seat_id "BBFFBBFRLL"), 820

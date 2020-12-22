@@ -21,7 +21,7 @@ parse_notes = |input|
         max = bounds.next().to_number()
         min..=max
       .to_tuple()
-    fields.insert category {rules}
+    fields.insert category, {rules}
 
   parse_ticket = |ticket|
     ticket
@@ -52,7 +52,7 @@ find_invalid_field = |ticket, fields|
 scanning_error_rate = |fields, tickets|
   tickets
     .each |ticket|
-      match find_invalid_field ticket fields
+      match find_invalid_field ticket, fields
         () then 0
         n then n
     .sum()
@@ -60,7 +60,7 @@ scanning_error_rate = |fields, tickets|
 assign_field_ids = |fields, tickets|
   # identify which tickets are valid
   valid_tickets = tickets
-    .keep |ticket| (find_invalid_field ticket fields) == ()
+    .keep |ticket| (find_invalid_field ticket, fields) == ()
     .to_tuple()
 
   # find out which fields could be a match for each column
@@ -71,7 +71,7 @@ assign_field_ids = |fields, tickets|
         n = ticket[i]
         field.rules.any |rule| rule.contains n
       if could_be_a_match
-        field.update "possible_ids" [] |possible_ids|
+        field.update "possible_ids", [], |possible_ids|
           possible_ids.push i
           possible_ids
 
@@ -99,24 +99,24 @@ analyze_ticket = |ticket, fields|
 
 export main = ||
   fields, your_ticket, nearby_tickets =
-    parse_notes (io.read_to_string koto.script_dir + "./input/16")
+    parse_notes io.read_to_string koto.script_dir + "./input/16"
 
-  print "Part one: {}" (scanning_error_rate fields nearby_tickets) # 26053
+  print "Part one: {}", (scanning_error_rate fields, nearby_tickets) # 26053
 
-  assign_field_ids fields nearby_tickets
-  print "Part two: {}" (analyze_ticket your_ticket fields) # 1515506256421
+  assign_field_ids fields, nearby_tickets
+  print "Part two: {}", (analyze_ticket your_ticket, fields) # 1515506256421
 
 
 export tests =
   test_part_one: ||
     fields, your_ticket, nearby_tickets =
-      parse_notes (io.read_to_string koto.script_dir + "./input/16-example-1")
-    assert_eq (scanning_error_rate fields nearby_tickets) 71
+      parse_notes io.read_to_string koto.script_dir + "./input/16-example-1"
+    assert_eq (scanning_error_rate fields, nearby_tickets), 71
 
   test_part_two: ||
     fields, your_ticket, nearby_tickets =
-      parse_notes (io.read_to_string koto.script_dir + "./input/16-example-2")
-    assign_field_ids fields nearby_tickets
-    assert_eq (fields.row.id) 0
-    assert_eq (fields.class.id) 1
-    assert_eq (fields.seat.id) 2
+      parse_notes io.read_to_string koto.script_dir + "./input/16-example-2"
+    assign_field_ids fields, nearby_tickets
+    assert_eq (fields.row.id), 0
+    assert_eq (fields.class.id), 1
+    assert_eq (fields.seat.id), 2

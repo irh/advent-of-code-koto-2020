@@ -3,21 +3,21 @@
 import enum.make_enum, io, koto, list, string.print
 from test import assert, assert_eq
 
-ops = make_enum "nop" "acc" "jmp"
+ops = make_enum "nop", "acc", "jmp"
 
 parse_program = |input|
   input
     .lines()
     .each |line|
-      op = ops.get (line.slice 0 3)
+      op = ops.get (line.slice 0, 3)
       value = line.slice(4).to_number()
-      num2 op value
+      num2 op, value
     .to_tuple()
 
 run_program = |program|
   ip = 0
   acc = 0
-  visited = list.with_size program.size() false
+  visited = list.with_size program.size(), false
   while ip < program.size() and not visited[ip]
     op, value = program[ip]
     visited[ip] = true
@@ -29,7 +29,7 @@ run_program = |program|
         ip += 1
       ops.jmp
         ip += value
-  acc, ip >= program.size()
+  acc.to_int(), ip >= program.size()
 
 fix_program_and_get_result = |program|
   for ip in 0..program.size()
@@ -39,15 +39,15 @@ fix_program_and_get_result = |program|
       ops.jmp then ops.nop
       else continue
     fixed = program.to_list()
-    fixed[ip] = num2 new_op value
+    fixed[ip] = num2 new_op, value
     result, terminated = run_program fixed
     if terminated
       return result
 
 export main = ||
-  program = parse_program (io.read_to_string koto.script_dir + "./input/08")
-  print "Part one: {}" (run_program program)[0] # 1915
-  print "Part two: {}" (fix_program_and_get_result program) # 944
+  program = parse_program io.read_to_string koto.script_dir + "./input/08"
+  print "Part one: {}", (run_program program)[0] # 1915
+  print "Part two: {}", (fix_program_and_get_result program) # 944
 
 export tests =
   pre_test: |self|
@@ -64,19 +64,19 @@ acc +6
 "
 
   test_parse_program: |self|
-    assert_eq self.program.size() 9
-    assert_eq self.program[0][0] ops.nop
-    assert_eq self.program[0][1] 0
-    assert_eq self.program[2][0] ops.jmp
-    assert_eq self.program[2][1] 4
-    assert_eq self.program[5][0] ops.acc
-    assert_eq self.program[5][1] -99
+    assert_eq self.program.size(), 9
+    assert_eq self.program[0][0], ops.nop
+    assert_eq self.program[0][1], 0
+    assert_eq self.program[2][0], ops.jmp
+    assert_eq self.program[2][1], 4
+    assert_eq self.program[5][0], ops.acc
+    assert_eq self.program[5][1], -99
 
   test_part_one: |self|
     result, terminated = run_program self.program
-    assert_eq result 5
+    assert_eq result, 5
     assert not terminated
 
   test_part_two: |self|
     result = fix_program_and_get_result self.program
-    assert_eq result 8
+    assert_eq result, 8
