@@ -57,8 +57,8 @@ export main = ||
   start_time, bus_ids = parse_bus_notes io.read_to_string koto.script_dir + "./input/13"
 
   bus, wait_time = (wait_time_for_next_bus bus_ids, start_time)
-  print "Part one: {}", (bus * wait_time) # 2935
-  print "Part two: {}", (find_contest_time bus_ids) # 836024966345345
+  print "Part one: ${bus * wait_time}" # 2935
+  print "Part two: ${find_contest_time bus_ids}" # 836024966345345
 
 export @tests =
   @pre_test: |self|

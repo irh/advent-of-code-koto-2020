@@ -36,8 +36,8 @@ play_game = |start_numbers, turn_count|
 export main = ||
   start_numbers = (8, 11, 0, 19, 1, 2)
 
-  print "Part one: {}", (play_game start_numbers, 2020) # 447
-  print "Part two: {}", (play_game start_numbers, 30000000) # 11721679
+  print "Part one: ${play_game start_numbers, 2020}" # 447
+  print "Part two: ${play_game start_numbers, 30000000}" # 11721679
 
 export @tests =
   @test part_one: ||

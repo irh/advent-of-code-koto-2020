@@ -9,7 +9,7 @@ parse_bag_rules = |input|
       # e.g. light red bags contain 1 bright white bag, 2 muted yellow bags.
       # e.g.  faded blue bags contain no other bags.
       words = line.split " "
-      bag = "{} {}".format words.next(), words.next()
+      bag = "${words.next()} ${words.next()}"
       words.next() # bags
       words.next() # contain
       contained_bags = {}
@@ -17,7 +17,7 @@ parse_bag_rules = |input|
         match words.next()
           "no" or () then break
           quantity
-            contained_bag = "{} {}".format words.next(), words.next()
+            contained_bag = "${words.next()} ${words.next()}"
             contained_bags.insert contained_bag, quantity.to_number()
             words.next() # bag(s)
       bag, contained_bags
@@ -43,8 +43,8 @@ count_contained_bags = |bag, rules|
 export main = ||
   rules = parse_bag_rules io.read_to_string koto.script_dir + "./input/07"
 
-  print "Part one: {}", (count_bag_options "shiny gold", rules) # 272
-  print "Part two: {}", (count_contained_bags "shiny gold", rules) # 172246
+  print "Part one: ${count_bag_options "shiny gold", rules}" # 272
+  print "Part two: ${count_contained_bags "shiny gold", rules}" # 172246
 
 export @tests =
   @pre_test: |self|

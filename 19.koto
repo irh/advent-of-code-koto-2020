@@ -56,16 +56,16 @@ message_checker = |rules|
       [sequence]
         self.match_sequence sequence, message, rule_ids
       [sequence_a, sequence_b]
-        self.match_sequence(sequence_a, message, rule_ids)
-          or self.match_sequence(sequence_b, message, rule_ids)
+        # TODO It should be possible to break before the `or`
+        self.match_sequence(sequence_a, message, rule_ids) or
+          self.match_sequence(sequence_b, message, rule_ids)
       else
         throw "Unsupported rule"
 
   match_char: |self, char, message, rule_ids|
     match message.chars().next()
       c if c == char
-        # TODO 'remaining_message = message[1..]' should be allowed here
-        remaining_message = if message.size() > 1 then message[1..] else ""
+        remaining_message = message[1..]
         self.match_rules remaining_message, rule_ids
       _ then false
 
@@ -88,9 +88,9 @@ update_rules = |rules|
 
 export main = ||
   rules, messages = parse_input io.read_to_string koto.script_dir + "./input/19"
-  print "Part one: {}", (valid_message_count rules, messages) # 279
+  print "Part one: ${valid_message_count rules, messages}" # 279
   update_rules rules
-  print "Part two: {}", (valid_message_count rules, messages) # 384
+  print "Part two: ${valid_message_count rules, messages}" # 384
 
 
 export @tests =

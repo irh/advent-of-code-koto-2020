@@ -70,12 +70,12 @@ export main = ||
   part_one = passports
     .keep |passport| passport_is_valid_part_one passport
     .count()
-  print "Part one: {}", part_one # 233
+  print "Part one: $part_one" # 233
 
   part_two = passports
     .keep |passport| passport_is_valid_part_two passport
     .count()
-  print "Part two: {}", part_two # 111
+  print "Part two: $part_two" # 111
 
 
 export @tests =

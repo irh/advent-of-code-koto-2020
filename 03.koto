@@ -35,8 +35,8 @@ check_slopes_and_multiply_tree_counts  = |grid|
 
 export main = ||
   input = parse_input io.read_to_string koto.script_dir + "./input/03"
-  print "Part one: {}", (count_trees_on_grid input, (3, 1)) # 250
-  print "Part two: {}", (check_slopes_and_multiply_tree_counts input) # 1592662500
+  print "Part one: ${count_trees_on_grid input, (3, 1)}" # 250
+  print "Part two: ${check_slopes_and_multiply_tree_counts input}" # 1592662500
 
 
 export @tests =

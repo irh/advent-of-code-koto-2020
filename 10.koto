@@ -40,8 +40,8 @@ count_arrangements = |adapters|
 export main = ||
   adapters = parse_input io.read_to_string koto.script_dir + "./input/10"
   differences = joltage_differences adapters
-  print "Part one: {}", (differences[1] * differences[3]) # 2040
-  print "Part two: {}", (count_arrangements adapters) # 28346956187648
+  print "Part one: ${differences[1] * differences[3]}" # 2040
+  print "Part two: ${count_arrangements adapters}" # 28346956187648
 
 export @tests =
   @pre_test: |self|

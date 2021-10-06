@@ -31,8 +31,8 @@ export main = ||
     .to_list()
   seat_ids.sort()
 
-  print "Part one: {}", seat_ids.last() # 976
-  print "Part two: {}", find_missing_seat seat_ids # 685
+  print "Part one: ${seat_ids.last()}" # 976
+  print "Part two: ${find_missing_seat seat_ids}" # 685
 
 export @tests =
   @test part_one: ||

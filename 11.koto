@@ -155,13 +155,13 @@ export main = ||
 
   part_one = grid.deep_copy()
   print "Part one"
-  print "- seats stabilised in {} steps", part_one.fill_seats_until_stable_part_one()
-  print "- occupied seats: {}", part_one.occupied_seats_count() # 2261
+  print "- seats stabilised in ${part_one.fill_seats_until_stable_part_one()} steps"
+  print "- occupied seats: ${part_one.occupied_seats_count()}" # 2261
 
   part_two = grid
   print "Part two"
-  print "- seats stabilised in {} steps", part_two.fill_seats_until_stable_part_two()
-  print "- occupied seats: {}", part_two.occupied_seats_count() # 2039
+  print "- seats stabilised in ${part_two.fill_seats_until_stable_part_two()} steps"
+  print "- occupied seats: ${part_two.occupied_seats_count()}" # 2039
 
 export @tests =
   @pre_test: |self|

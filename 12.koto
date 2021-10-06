@@ -49,8 +49,8 @@ run_instructions_part_two = |instructions|
 
 export main = ||
   instructions = parse_instructions io.read_to_string koto.script_dir + "./input/12"
-  print "Part one: {}", (run_instructions_part_one instructions) # 319
-  print "Part two: {}", (run_instructions_part_two instructions) # 50157
+  print "Part one: ${run_instructions_part_one instructions}" # 319
+  print "Part two: ${run_instructions_part_two instructions}" # 50157
 
 export @tests =
   @pre_test: |self|

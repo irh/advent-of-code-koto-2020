@@ -76,12 +76,12 @@ export main = ||
   part_one = expressions
     .each |expression| evaluate_1 expression
     .sum()
-  print "Part one: {}", part_one # 45840336521334
+  print "Part one: $part_one" # 45840336521334
 
   part_two = expressions
     .each |expression| evaluate_2 expression
     .sum()
-  print "Part two: {}", part_two # 328920644404583
+  print "Part two: $part_two" # 328920644404583
 
 
 export @tests =
