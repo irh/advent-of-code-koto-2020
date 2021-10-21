@@ -1,0 +1,58 @@
+import io.print
+
+print "Day 1"
+import "01"
+
+print "\nDay 2"
+import "02"
+
+print "\nDay 3"
+import "03"
+
+print "\nDay 4"
+import "04"
+
+print "\nDay 5"
+import "05"
+
+print "\nDay 6"
+import "06"
+
+print "\nDay 7"
+import "07"
+
+print "\nDay 8"
+import "08"
+
+print "\nDay 9"
+import "09"
+
+print "\nDay 10"
+import "10"
+
+print "\nDay 11"
+import "11"
+
+print "\nDay 12"
+import "12"
+
+print "\nDay 13"
+import "13"
+
+print "\nDay 14"
+import "14"
+
+print "\nDay 15"
+import "15"
+
+print "\nDay 16"
+import "16"
+
+print "\nDay 17"
+import "17"
+
+print "\nDay 18"
+import "18"
+
+print "\nDay 19"
+import "19"
