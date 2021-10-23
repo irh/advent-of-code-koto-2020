@@ -56,9 +56,8 @@ message_checker = |rules|
       [sequence]
         self.match_sequence sequence, message, rule_ids
       [sequence_a, sequence_b]
-        # TODO It should be possible to break before the `or`
-        self.match_sequence(sequence_a, message, rule_ids) or
-          self.match_sequence(sequence_b, message, rule_ids)
+        self.match_sequence(sequence_a, message, rule_ids)
+          or self.match_sequence(sequence_b, message, rule_ids)
       else
         throw "Unsupported rule"
 
