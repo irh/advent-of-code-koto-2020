@@ -45,7 +45,7 @@ fix_program_and_get_result = |program|
       return result
 
 export main = ||
-  program = parse_program io.read_to_string koto.script_dir + "./input/08"
+  program = parse_program io.read_to_string io.extend_path koto.script_dir, "input", "08"
   print "Part one: ${(run_program program)[0]}" # 1915
   print "Part two: ${fix_program_and_get_result program}" # 944
 

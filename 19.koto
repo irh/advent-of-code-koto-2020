@@ -85,7 +85,8 @@ update_rules = |rules|
 
 
 export main = ||
-  rules, messages = parse_input io.read_to_string koto.script_dir + "./input/19"
+  path = io.extend_path koto.script_dir, "input", "19"
+  rules, messages = parse_input io.read_to_string path
   print "Part one: ${valid_message_count rules, messages}" # 279
   update_rules rules
   print "Part two: ${valid_message_count rules, messages}" # 384
@@ -94,7 +95,7 @@ export main = ||
 export @tests =
   @test part_one: |self|
     rules, messages =
-      parse_input io.read_to_string koto.script_dir + "./input/19-example-1"
+      parse_input io.read_to_string koto.script_dir + "/input/19-example-1"
     checker = message_checker rules
     assert checker.check_message "ababbb"
     assert checker.check_message "abbbab"
@@ -105,7 +106,7 @@ export @tests =
 
   @test part_two: |self|
     rules, messages =
-      parse_input io.read_to_string koto.script_dir + "./input/19-example-2"
+      parse_input io.read_to_string koto.script_dir + "/input/19-example-2"
     assert_eq (valid_message_count rules, messages), 3
 
     update_rules rules

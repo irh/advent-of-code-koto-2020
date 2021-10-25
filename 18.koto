@@ -71,7 +71,8 @@ evaluate_2 = |input|
 
 
 export main = ||
-  expressions = (io.read_to_string koto.script_dir + "./input/18").lines().to_tuple()
+  input = io.read_to_string io.extend_path koto.script_dir, "input", "18"
+  expressions = input.lines().to_tuple()
 
   part_one = expressions
     .each |expression| evaluate_1 expression

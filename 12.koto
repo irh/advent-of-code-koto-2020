@@ -48,7 +48,8 @@ run_instructions_part_two = |instructions|
   (ship[0].abs() + ship[1].abs()).to_int()
 
 export main = ||
-  instructions = parse_instructions io.read_to_string koto.script_dir + "./input/12"
+  path = io.extend_path koto.script_dir, "input", "12"
+  instructions = parse_instructions io.read_to_string path
   print "Part one: ${run_instructions_part_one instructions}" # 319
   print "Part two: ${run_instructions_part_two instructions}" # 50157
 

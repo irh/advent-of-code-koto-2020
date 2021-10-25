@@ -31,7 +31,7 @@ product_of_three_expenses_that_sum_to_2020 = |expenses|
 
 
 export main = ||
-  input = io.read_to_string koto.script_dir + "./input/01"
+  input = io.read_to_string io.extend_path koto.script_dir, "input", "01"
   expenses = parse_expenses input
 
   part_one = product_of_two_expenses_that_sum_to_2020 expenses

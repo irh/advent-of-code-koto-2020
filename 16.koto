@@ -1,7 +1,8 @@
 # https://adventofcode.com/2020/day/16
 
-import io.print
+from io import extend_path, print, read_to_string
 from test import assert, assert_eq
+import koto.script_dir
 
 parse_notes = |input|
   fields = {}
@@ -99,7 +100,7 @@ analyze_ticket = |ticket, fields|
 
 export main = ||
   fields, your_ticket, nearby_tickets =
-    parse_notes io.read_to_string koto.script_dir + "./input/16"
+    parse_notes read_to_string extend_path script_dir, "input", "16"
 
   print "Part one: ${scanning_error_rate fields, nearby_tickets}" # 26053
 
@@ -110,12 +111,12 @@ export main = ||
 export @tests =
   @test part_one: ||
     fields, your_ticket, nearby_tickets =
-      parse_notes io.read_to_string koto.script_dir + "./input/16-example-1"
+      parse_notes read_to_string extend_path script_dir, "input", "16-example-1"
     assert_eq (scanning_error_rate fields, nearby_tickets), 71
 
   @test part_two: ||
     fields, your_ticket, nearby_tickets =
-      parse_notes io.read_to_string koto.script_dir + "./input/16-example-2"
+      parse_notes read_to_string extend_path script_dir, "input", "16-example-2"
     assign_field_ids fields, nearby_tickets
     assert_eq (fields.row.id), 0
     assert_eq (fields.class.id), 1

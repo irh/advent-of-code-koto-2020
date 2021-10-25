@@ -56,3 +56,5 @@ import "18"
 
 print "\nDay 19"
 import "19"
+
+print "\nSuccess!"

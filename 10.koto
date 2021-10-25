@@ -1,6 +1,7 @@
 # https://adventofcode.com/2020/day/10
 
-import io.print, test.assert_eq
+from io import extend_path, print, read_to_string
+import koto.script_dir, test.assert_eq
 
 parse_input = |input|
   input
@@ -38,7 +39,7 @@ count_arrangements = |adapters|
   arrangements.last()
 
 export main = ||
-  adapters = parse_input io.read_to_string koto.script_dir + "./input/10"
+  adapters = parse_input read_to_string extend_path script_dir, "input", "10"
   differences = joltage_differences adapters
   print "Part one: ${differences[1] * differences[3]}" # 2040
   print "Part two: ${count_arrangements adapters}" # 28346956187648
@@ -46,9 +47,9 @@ export main = ||
 export @tests =
   @pre_test: |self|
     self.adapters_1 =
-      parse_input io.read_to_string koto.script_dir + "./input/10-example-1"
+      parse_input read_to_string extend_path script_dir, "input", "10-example-1"
     self.adapters_2 =
-      parse_input io.read_to_string koto.script_dir + "./input/10-example-2"
+      parse_input read_to_string extend_path script_dir, "input", "10-example-2"
 
   @test part_one: |self|
     differences = joltage_differences self.adapters_1

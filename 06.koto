@@ -37,7 +37,7 @@ count_answers_part_two = |answers|
   result
 
 export main = ||
-  input = io.read_to_string koto.script_dir + "./input/06"
+  input = io.read_to_string io.extend_path koto.script_dir, "input", "06"
 
   print "Part one: ${count_answers_part_one input}" # 6903
   print "Part two: ${count_answers_part_two input}" # 3493
