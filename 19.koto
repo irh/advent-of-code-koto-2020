@@ -14,7 +14,7 @@ parse_input = |input|
     rest = rest.trim()
     first_char = rest.chars().next()
     match first_char
-      "\"" then
+      '"'
         char = rest.slice 1, (rest.size() - 1)
         rules.insert id, {char}
       else
@@ -22,7 +22,7 @@ parse_input = |input|
         sequence = []
         for token in rest.split " "
           match token
-            "|" then
+            "|"
               sequences.push sequence.copy()
               sequence.clear()
             else
@@ -58,15 +58,14 @@ message_checker = |rules|
       [sequence_a, sequence_b]
         self.match_sequence(sequence_a, message, rule_ids)
           or self.match_sequence(sequence_b, message, rule_ids)
-      else
-        throw "Unsupported rule"
+      else throw "Unsupported rule"
 
   match_char: |self, char, message, rule_ids|
     match message.chars().next()
       c if c == char
         remaining_message = message[1..]
         self.match_rules remaining_message, rule_ids
-      _ then false
+      else false
 
   match_sequence: |self, sequence, message, remaining_ids|
     combined_ids = sequence + remaining_ids
