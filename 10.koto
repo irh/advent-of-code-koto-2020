@@ -39,7 +39,9 @@ count_arrangements = |adapters|
   arrangements.last()
 
 export main = ||
-  adapters = parse_input read_to_string extend_path script_dir, "input", "10"
+  adapters = io.extend_path koto.script_dir, "input", "10"
+    >> io.read_to_string
+    >> parse_input
   differences = joltage_differences adapters
   print "Part one: ${differences[1] * differences[3]}" # 2040
   print "Part two: ${count_arrangements adapters}" # 28346956187648

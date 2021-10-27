@@ -41,7 +41,9 @@ count_contained_bags = |bag, rules|
     .sum()
 
 export main = ||
-  rules = parse_bag_rules io.read_to_string io.extend_path koto.script_dir, "input", "07"
+  rules = io.extend_path koto.script_dir, "input", "07"
+    >> io.read_to_string
+    >> parse_bag_rules
 
   print "Part one: ${count_bag_options "shiny gold", rules}" # 272
   print "Part two: ${count_contained_bags "shiny gold", rules}" # 172246

@@ -98,7 +98,9 @@ run_program = |program, version|
 
 
 export main = ||
-  program = parse_program io.read_to_string io.extend_path koto.script_dir, "input", "14"
+  program = io.extend_path koto.script_dir, "input", "14"
+    >> io.read_to_string
+    >> parse_program
 
   print "Part one: ${run_program program, 1}" # 4297467072083
   print "Part two: ${run_program program, 2}" # 5030603328768

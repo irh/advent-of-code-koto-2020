@@ -56,7 +56,9 @@ find_encryption_weakness = |input, buffer_size|
         return min + max
 
 export main = ||
-  input = parse_input io.read_to_string io.extend_path koto.script_dir, "input", "09"
+  input = io.extend_path koto.script_dir, "input", "09"
+    >> io.read_to_string
+    >> parse_input
   print "Part one: ${find_first_invalid_input input, 25}" # 1930745883
   print "Part two: ${find_encryption_weakness input, 25}" # 268878261
 

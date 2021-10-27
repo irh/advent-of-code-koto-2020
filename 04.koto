@@ -65,8 +65,9 @@ passport_is_valid_part_two = |passport|
 
 
 export main = ||
-  path = io.extend_path koto.script_dir, "input", "04"
-  passports = parse_passports io.read_to_string path
+  passports = io.extend_path koto.script_dir, "input", "04"
+    >> io.read_to_string
+    >> parse_passports
 
   part_one = passports
     .keep |passport| passport_is_valid_part_one passport

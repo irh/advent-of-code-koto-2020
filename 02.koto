@@ -54,8 +54,9 @@ count_valid_passwords_part_two = |input|
 
 
 export main = ||
-  path = io.extend_path koto.script_dir, ".", "input", "02"
-  input = parse_input io.read_to_string path
+  input = io.extend_path koto.script_dir, "input", "02"
+    >> io.read_to_string
+    >> parse_input
   print "Part one: ${count_valid_passwords_part_one input}" # 638
   print "Part two: ${count_valid_passwords_part_two input}" # 699
 

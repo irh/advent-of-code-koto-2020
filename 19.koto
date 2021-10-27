@@ -85,8 +85,9 @@ update_rules = |rules|
 
 
 export main = ||
-  path = io.extend_path koto.script_dir, "input", "19"
-  rules, messages = parse_input io.read_to_string path
+  rules, messages = io.extend_path koto.script_dir, "input", "19"
+    >> io.read_to_string
+    >> parse_input
   print "Part one: ${valid_message_count rules, messages}" # 279
   update_rules rules
   print "Part two: ${valid_message_count rules, messages}" # 384

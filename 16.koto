@@ -100,7 +100,9 @@ analyze_ticket = |ticket, fields|
 
 export main = ||
   fields, your_ticket, nearby_tickets =
-    parse_notes read_to_string extend_path script_dir, "input", "16"
+    extend_path script_dir, "input", "16"
+      >> read_to_string
+      >> parse_notes
 
   print "Part one: ${scanning_error_rate fields, nearby_tickets}" # 26053
 
@@ -111,12 +113,16 @@ export main = ||
 export @tests =
   @test part_one: ||
     fields, your_ticket, nearby_tickets =
-      parse_notes read_to_string extend_path script_dir, "input", "16-example-1"
+      extend_path script_dir, "input", "16-example-1"
+        >> read_to_string
+        >> parse_notes
     assert_eq (scanning_error_rate fields, nearby_tickets), 71
 
   @test part_two: ||
     fields, your_ticket, nearby_tickets =
-      parse_notes read_to_string extend_path script_dir, "input", "16-example-2"
+      extend_path script_dir, "input", "16-example-2"
+        >> read_to_string
+        >> parse_notes
     assign_field_ids fields, nearby_tickets
     assert_eq (fields.row.id), 0
     assert_eq (fields.class.id), 1

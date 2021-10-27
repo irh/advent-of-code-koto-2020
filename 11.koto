@@ -151,7 +151,9 @@ make_floor_grid = |input|
         result += "\n"
 
 export main = ||
-  grid = make_floor_grid io.read_to_string io.extend_path koto.script_dir, "input", "11"
+  grid = io.extend_path koto.script_dir, "input", "11"
+    >> io.read_to_string
+    >> make_floor_grid
 
   part_one = grid.deep_copy()
   print "Part one"
