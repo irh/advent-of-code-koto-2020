@@ -25,7 +25,7 @@ parse_program = |input|
     .each |line|
       words = line.split " "
       match words.next()
-        "mask" then
+        "mask"
           # e.g. mask = 0110xx10...
           words.next() # =
           mask = words.next()
@@ -37,7 +37,7 @@ parse_program = |input|
                 "1" then 1
             .to_tuple()
           commands.mask, mask, ()
-        mem then
+        mem
           # e.g. mem[43816] = 123
           index = mem
             .slice 4
@@ -87,9 +87,9 @@ run_program = |program, version|
       commands.mem
         index, value = value_1, value_2
         match version
-          1 then
+          1
             memory.insert index, (apply_mask_to_value value, mask)
-          2 then
+          2
             for decoded_index in index_decoder index, mask
               memory.insert decoded_index, value
 

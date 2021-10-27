@@ -30,7 +30,7 @@ evaluate_expression = |tokens, ops, min_priority|
     token = tokens.peek()
     match token
       () or ")" then break
-      "(" then
+      "("
         tokens.next()
         # Parse the nested expression, starting with minimum priority of 0
         lhs = evaluate_expression tokens, ops, 0
@@ -47,7 +47,7 @@ evaluate_expression = |tokens, ops, min_priority|
         lhs = match op
           "+" then lhs + rhs
           "*" then lhs * rhs
-      n then
+      n
         tokens.next()
         lhs = n.to_number()
   lhs

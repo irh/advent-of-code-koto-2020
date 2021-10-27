@@ -84,7 +84,7 @@ assign_field_ids = |fields, tickets|
   until pending_fields.is_empty()
     name, field = pending_fields.get_index(0)
     match field.possible_ids
-      [index] then
+      [index]
         fields.get(name).id = index
         pending_fields.remove name
         for _, field in pending_fields
