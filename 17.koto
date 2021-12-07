@@ -24,7 +24,6 @@ generate_local_4d = ||
 local_3d = generate_local_3d().to_tuple()
 local_4d = generate_local_4d().to_tuple()
 
-
 parse_grid = |input|
   input.lines().enumerate()
     .fold {}, |grid, (y, line)|
@@ -33,7 +32,6 @@ parse_grid = |input|
           if c == "#"
             grid.insert (num4 x, y)
           grid
-
 
 cycle_grid = |grid, local_positions|
   positions_to_check = grid.fold {}, |result, (position, _)|
@@ -65,8 +63,7 @@ cycle_grid_4d = |grid|
     grid = cycle_grid grid, local_4d
   grid.size()
 
-
-export main = ||
+@main = ||
   grid = io.extend_path koto.script_dir, "input", "17"
     >> io.read_to_string
     >> parse_grid
@@ -74,8 +71,7 @@ export main = ||
   print "Part one: ${cycle_grid_3d grid.deep_copy()}" # 382
   print "Part two: ${cycle_grid_4d grid}" # 2552
 
-
-export @tests =
+@tests =
   @pre_test: |self|
     self.grid = parse_grid "\
 .#.

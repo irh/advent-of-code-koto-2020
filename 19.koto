@@ -3,7 +3,6 @@
 import io.print
 from test import assert, assert_eq
 
-
 parse_input = |input|
   rules = {}
   lines = input.lines()
@@ -32,7 +31,6 @@ parse_input = |input|
 
   messages = lines.to_tuple()
   rules, messages
-
 
 message_checker = |rules|
   rules: rules
@@ -71,20 +69,17 @@ message_checker = |rules|
     combined_ids = sequence + remaining_ids
     self.match_rules message, combined_ids
 
-
 valid_message_count = |rules, messages|
   checker = message_checker rules
   messages
     .keep |message| checker.check_message message
     .count()
 
-
 update_rules = |rules|
   rules.insert 8, {sequences: [[42], [42, 8]]}
   rules.insert 11, {sequences: [[42, 31], [42, 11, 31]]}
 
-
-export main = ||
+@main = ||
   rules, messages = io.extend_path koto.script_dir, "input", "19"
     >> io.read_to_string
     >> parse_input
@@ -92,8 +87,7 @@ export main = ||
   update_rules rules
   print "Part two: ${valid_message_count rules, messages}" # 384
 
-
-export @tests =
+@tests =
   @test part_one: |self|
     rules, messages =
       parse_input io.read_to_string koto.script_dir + "/input/19-example-1"

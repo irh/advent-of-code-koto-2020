@@ -36,13 +36,13 @@ count_answers_part_two = |answers|
   result += count_for_group people_in_group, answers_for_group
   result
 
-export main = ||
+@main = ||
   input = io.read_to_string io.extend_path koto.script_dir, "input", "06"
 
   print "Part one: ${count_answers_part_one input}" # 6903
   print "Part two: ${count_answers_part_two input}" # 3493
 
-export @tests =
+@tests =
   @pre_test: |self|
     self.input = "\
 abc

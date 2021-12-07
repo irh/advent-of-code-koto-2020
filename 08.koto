@@ -44,14 +44,14 @@ fix_program_and_get_result = |program|
     if terminated
       return result
 
-export main = ||
+@main = ||
   program = io.extend_path koto.script_dir, "input", "08"
     >> io.read_to_string
     >> parse_program
   print "Part one: ${(run_program program)[0]}" # 1915
   print "Part two: ${fix_program_and_get_result program}" # 944
 
-export @tests =
+@tests =
   @pre_test: |self|
     self.program = parse_program "\
 nop +0

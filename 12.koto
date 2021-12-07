@@ -47,14 +47,14 @@ run_instructions_part_two = |instructions|
       "F" then ship += waypoint * value
   (ship[0].abs() + ship[1].abs()).to_int()
 
-export main = ||
+@main = ||
   instructions = io.extend_path koto.script_dir, "input", "12"
     >> io.read_to_string
     >> parse_instructions
   print "Part one: ${run_instructions_part_one instructions}" # 319
   print "Part two: ${run_instructions_part_two instructions}" # 50157
 
-export @tests =
+@tests =
   @pre_test: |self|
     self.instructions = parse_instructions "\
 F10

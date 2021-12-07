@@ -33,7 +33,7 @@ check_slopes_and_multiply_tree_counts  = |grid|
     .product()
 
 
-export main = ||
+@main = ||
   input = io.extend_path koto.script_dir, "input", "03"
     >> io.read_to_string
     >> parse_input
@@ -41,7 +41,7 @@ export main = ||
   print "Part two: ${check_slopes_and_multiply_tree_counts input}" # 1592662500
 
 
-export @tests =
+@tests =
   @pre_test: |self|
     self.input = parse_input "\
 ..##.......

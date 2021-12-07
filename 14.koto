@@ -96,8 +96,7 @@ run_program = |program, version|
   # The program result is the sum of all values in memory
   memory.values().sum()
 
-
-export main = ||
+@main = ||
   program = io.extend_path koto.script_dir, "input", "14"
     >> io.read_to_string
     >> parse_program
@@ -105,7 +104,7 @@ export main = ||
   print "Part one: ${run_program program, 1}" # 4297467072083
   print "Part two: ${run_program program, 2}" # 5030603328768
 
-export @tests =
+@tests =
   @test part_one: ||
     program = parse_program "\
 mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X

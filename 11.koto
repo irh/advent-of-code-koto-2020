@@ -30,98 +30,80 @@ make_floor_grid = |input|
     row_size: row_size
     row_count: row_count
 
-    fill_seats: |self, filling_logic|
-      worker_count = os.physical_cpu_count()
-      batch_size = row_count / worker_count
-      workers = (0..worker_count)
-        .each |worker_index|
-          thread.create || filling_logic worker_index, batch_size
-        .to_tuple()
+    fill_seats_part_one: |self|
+      grid, temp_grid = self.grid, self.temp_grid
+      row_size, row_count = self.row_size, self.row_count
+      state_changed = false
 
-      state_changed = workers.fold false, |result, worker|
-        worker.join() or result
+      batch_start = 0
+      for y in 0..row_count
+        y_index = y * row_size
+        for x in 0..row_size
+          index = y_index + x
+          state = grid[index]
+          if state == cell.floor then continue
 
-      list.swap self.grid, self.temp_grid
+          occupied_count = 0
+          for direction in directions
+            dx = x + direction[0]
+            if not (0 <= dx < row_size)
+              continue
+            dy = y + direction[1]
+            if not (0 <= dy < row_count)
+              continue
+            if grid[dy * row_size + dx] == cell.occupied
+              occupied_count += 1
+
+          temp_grid[index] = match state
+            cell.empty if occupied_count == 0
+              state_changed = true
+              cell.occupied
+            cell.occupied if occupied_count >= 4
+              state_changed = true
+              cell.empty
+            else state
+      grid.swap temp_grid
       state_changed
 
-    fill_seats_part_one: |self|
-      self.fill_seats |worker_index, batch_size|
-        grid, temp_grid = self.grid, self.temp_grid
-        row_size, row_count = self.row_size, self.row_count
-        state_changed = false
-
-        batch_start = batch_size * worker_index
-        batch = batch_start..(batch_start + batch_size).min row_count
-        for y in batch
-          y_index = y * row_size
-          for x in 0..row_size
-            index = y_index + x
-            state = grid[index]
-            if state == cell.floor then continue
-
-            occupied_count = 0
-            for direction in directions
-              dx = x + direction[0]
-              if not (0 <= dx < row_size)
-                continue
-              dy = y + direction[1]
-              if not (0 <= dy < row_count)
-                continue
-              if grid[dy * row_size + dx] == cell.occupied
-                occupied_count += 1
-
-            temp_grid[index] = match state
-              cell.empty if occupied_count == 0
-                state_changed = true
-                cell.occupied
-              cell.occupied if occupied_count >= 4
-                state_changed = true
-                cell.empty
-              else state
-        state_changed
-
     fill_seats_part_two: |self|
-      self.fill_seats |worker_index, batch_size|
-        grid, temp_grid = self.grid, self.temp_grid
-        row_size, row_count = self.row_size, self.row_count
-        state_changed = false
+      grid, temp_grid = self.grid, self.temp_grid
+      row_size, row_count = self.row_size, self.row_count
+      state_changed = false
 
-        batch_start = batch_size * worker_index
-        batch = batch_start..(batch_start + batch_size).min row_count
-        for y in batch
-          y_index = y * row_size
-          for x in 0..row_size
-            index = y_index + x
-            state = grid[index]
-            if state == cell.floor then continue
+      for y in 0..row_count
+        y_index = y * row_size
+        for x in 0..row_size
+          index = y_index + x
+          state = grid[index]
+          if state == cell.floor then continue
 
-            occupied_count = 0
-            for direction in directions
-              dx, dy = x, y
-              loop
-                dx += direction[0]
-                if not 0 <= dx < row_size
-                  break
-                dy += direction[1]
-                if not 0 <= dy < row_count
-                  break
-                match grid[dy * row_size + dx]
-                  cell.empty
-                    break
-                  cell.occupied
-                    occupied_count += 1
-                    break
-
-            temp_grid[index] = match state
-              cell.empty if occupied_count == 0
-                state_changed = true
-                cell.occupied
-              cell.occupied if occupied_count >= 5
-                state_changed = true
+          occupied_count = 0
+          for direction in directions
+            dx, dy = x, y
+            loop
+              dx += direction[0]
+              if not 0 <= dx < row_size
+                break
+              dy += direction[1]
+              if not 0 <= dy < row_count
+                break
+              match grid[dy * row_size + dx]
                 cell.empty
-              else state
-        state_changed
+                  break
+                cell.occupied
+                  occupied_count += 1
+                  break
 
+          temp_grid[index] = match state
+            cell.empty if occupied_count == 0
+              state_changed = true
+              cell.occupied
+            cell.occupied if occupied_count >= 5
+              state_changed = true
+              cell.empty
+            else state
+      grid.swap temp_grid
+      state_changed
 
     fill_seats_until_stable_part_one: |self|
       result = 0
@@ -150,7 +132,7 @@ make_floor_grid = |input|
             cell.occupied then "#"
         result += "\n"
 
-export main = ||
+@main = ||
   grid = io.extend_path koto.script_dir, "input", "11"
     >> io.read_to_string
     >> make_floor_grid
@@ -165,7 +147,7 @@ export main = ||
   print "- seats stabilised in ${part_two.fill_seats_until_stable_part_two()} steps"
   print "- occupied seats: ${part_two.occupied_seats_count()}" # 2039
 
-export @tests =
+@tests =
   @pre_test: |self|
     self.grid = make_floor_grid "\
 L.LL.LL.LL

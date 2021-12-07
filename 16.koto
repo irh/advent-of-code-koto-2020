@@ -98,7 +98,7 @@ analyze_ticket = |ticket, fields|
     .each |(_, field)| ticket[field.id]
     .product()
 
-export main = ||
+@main = ||
   fields, your_ticket, nearby_tickets =
     extend_path script_dir, "input", "16"
       >> read_to_string
@@ -109,8 +109,7 @@ export main = ||
   assign_field_ids fields, nearby_tickets
   print "Part two: ${analyze_ticket your_ticket, fields}" # 1515506256421
 
-
-export @tests =
+@tests =
   @test part_one: ||
     fields, your_ticket, nearby_tickets =
       extend_path script_dir, "input", "16-example-1"

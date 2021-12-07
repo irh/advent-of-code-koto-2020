@@ -2,7 +2,6 @@
 
 import io.print, test.assert_eq
 
-
 peekable_tokens = |expression|
   iter: expression.chars().keep |c| c != " "
   peeked: ()
@@ -19,7 +18,6 @@ peekable_tokens = |expression|
     if self.peeked == ()
       self.peeked = self.iter.next()
     self.peeked
-
 
 evaluate_expression = |tokens, ops, min_priority|
   lhs = ()
@@ -52,7 +50,6 @@ evaluate_expression = |tokens, ops, min_priority|
         lhs = n.to_number()
   lhs
 
-
 evaluate_1 = |input|
   # + and * have the same priority
   ops =
@@ -69,8 +66,7 @@ evaluate_2 = |input|
   tokens = peekable_tokens input
   evaluate_expression tokens, ops, 0
 
-
-export main = ||
+@main = ||
   input = io.read_to_string io.extend_path koto.script_dir, "input", "18"
   expressions = input.lines().to_tuple()
 
@@ -84,8 +80,7 @@ export main = ||
     .sum()
   print "Part two: $part_two" # 328920644404583
 
-
-export @tests =
+@tests =
   @test part_one: |self|
     assert_eq (evaluate_1 "1 + 2 * 3 + 4 * 5 + 6"), 71
     assert_eq (evaluate_1 "1 + (2 * 3) + (4 * (5 + 6))"), 51

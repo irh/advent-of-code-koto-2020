@@ -33,13 +33,13 @@ play_game = |start_numbers, turn_count|
   last_number
 
 
-export main = ||
+@main = ||
   start_numbers = (8, 11, 0, 19, 1, 2)
 
   print "Part one: ${play_game start_numbers, 2020}" # 447
   print "Part two: ${play_game start_numbers, 30000000}" # 11721679
 
-export @tests =
+@tests =
   @test part_one: ||
     assert_eq (play_game (0, 3, 6), 2020), 436
 

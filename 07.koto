@@ -40,7 +40,7 @@ count_contained_bags = |bag, rules|
       count + count * count_contained_bags contained_bag, rules
     .sum()
 
-export main = ||
+@main = ||
   rules = io.extend_path koto.script_dir, "input", "07"
     >> io.read_to_string
     >> parse_bag_rules
@@ -48,7 +48,7 @@ export main = ||
   print "Part one: ${count_bag_options "shiny gold", rules}" # 272
   print "Part two: ${count_contained_bags "shiny gold", rules}" # 172246
 
-export @tests =
+@tests =
   @pre_test: |self|
     self.example_1 = "\
 light red bags contain 1 bright white bag, 2 muted yellow bags.

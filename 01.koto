@@ -30,7 +30,7 @@ product_of_three_expenses_that_sum_to_2020 = |expenses|
           return expense_x * expense_y * expense_z
 
 
-export main = ||
+@main = ||
   input = io.extend_path koto.script_dir, "input", "01"
     >> io.read_to_string
     >> parse_expenses
@@ -42,7 +42,7 @@ export main = ||
   print "Part two: $part_two" # 236430480
 
 
-export @tests =
+@tests =
   @pre_test: |self|
     self.input = "\
 1721

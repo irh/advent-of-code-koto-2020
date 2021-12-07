@@ -64,7 +64,7 @@ passport_is_valid_part_two = |passport|
   true
 
 
-export main = ||
+@main = ||
   passports = io.extend_path koto.script_dir, "input", "04"
     >> io.read_to_string
     >> parse_passports
@@ -80,7 +80,7 @@ export main = ||
   print "Part two: $part_two" # 111
 
 
-export @tests =
+@tests =
   @pre_test: |self|
     self.passports = parse_passports "\
 ecl:gry pid:860033327 eyr:2020 hcl:#fffffd

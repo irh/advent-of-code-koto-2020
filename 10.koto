@@ -38,7 +38,7 @@ count_arrangements = |adapters|
   # The result is the arrangement count for the last adapter
   arrangements.last()
 
-export main = ||
+@main = ||
   adapters = io.extend_path koto.script_dir, "input", "10"
     >> io.read_to_string
     >> parse_input
@@ -46,7 +46,7 @@ export main = ||
   print "Part one: ${differences[1] * differences[3]}" # 2040
   print "Part two: ${count_arrangements adapters}" # 28346956187648
 
-export @tests =
+@tests =
   @pre_test: |self|
     self.adapters_1 =
       parse_input read_to_string extend_path script_dir, "input", "10-example-1"
