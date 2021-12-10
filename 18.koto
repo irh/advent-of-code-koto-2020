@@ -1,7 +1,5 @@
 # https://adventofcode.com/2020/day/18
 
-import io.print, test.assert_eq
-
 peekable_tokens = |expression|
   iter: expression.chars().keep |c| c != " "
   peeked: ()

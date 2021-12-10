@@ -1,7 +1,5 @@
 # https://adventofcode.com/2020/day/5
 
-import io.print, test.assert_eq
-
 lower_half = |r| r.start()..r.start() + r.size() / 2
 upper_half = |r| r.start() + r.size() / 2..r.end()
 
@@ -29,7 +27,7 @@ find_missing_seat = |sorted_seat_ids|
     .lines()
     .each |seat_code| seat_id seat_code
     .to_list()
-  seat_ids.sort()
+    .sort()
 
   print "Part one: ${seat_ids.last()}" # 976
   print "Part two: ${find_missing_seat seat_ids}" # 685

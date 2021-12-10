@@ -1,8 +1,5 @@
 # https://adventofcode.com/2020/day/20
 
-import io.print
-from test import assert, assert_eq
-
 edge_id = |edge|
   # An edge is a series of 1s and 0s, a numerical ID can then be produced by packing the
   # edge as a binary number.

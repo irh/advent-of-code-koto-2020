@@ -1,7 +1,5 @@
 # https://adventofcode.com/2020/day/12
 
-import io.print, test.assert_eq
-
 north = num2 0, 1
 south = num2 0, -1
 east  = num2 1, 0

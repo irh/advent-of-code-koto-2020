@@ -1,7 +1,6 @@
 # https://adventofcode.com/2020/day/8
 
-import enum.make_enum, io.print
-from test import assert, assert_eq
+import enum.make_enum
 
 ops = make_enum "nop", "acc", "jmp"
 

@@ -1,14 +1,14 @@
 # https://adventofcode.com/2020/day/10
 
-from io import extend_path, print, read_to_string
-import koto.script_dir, test.assert_eq
+from io import extend_path, read_to_string
+import koto.script_dir
 
 parse_input = |input|
   input
     .lines()
     .each |line| line.to_number()
     .to_list()
-    .sort_copy()
+    .sort()
 
 joltage_differences = |adapters|
   differences = [0, 0, 0, 0]
@@ -40,7 +40,7 @@ count_arrangements = |adapters|
 
 @main = ||
   adapters = io.extend_path koto.script_dir, "input", "10"
-    >> io.read_to_string
+    >> read_to_string
     >> parse_input
   differences = joltage_differences adapters
   print "Part one: ${differences[1] * differences[3]}" # 2040

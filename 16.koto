@@ -1,7 +1,6 @@
 # https://adventofcode.com/2020/day/16
 
-from io import extend_path, print, read_to_string
-from test import assert, assert_eq
+from io import extend_path, read_to_string
 import koto.script_dir
 
 parse_notes = |input|

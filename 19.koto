@@ -1,8 +1,5 @@
 # https://adventofcode.com/2020/day/19
 
-import io.print
-from test import assert, assert_eq
-
 parse_input = |input|
   rules = {}
   lines = input.lines()

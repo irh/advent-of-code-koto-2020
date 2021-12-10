@@ -1,14 +1,10 @@
 # https://adventofcode.com/2020/day/1
 
-import io.print, test.assert_eq
-
-
 parse_expenses = |input|
   input
     .lines()
     .each |line| line.to_number()
     .to_tuple()
-
 
 product_of_two_expenses_that_sum_to_2020 = |expenses|
   for x in 0..expenses.size()
@@ -17,7 +13,6 @@ product_of_two_expenses_that_sum_to_2020 = |expenses|
       expense_y = expenses[y]
       if expense_x + expense_y == 2020
         return expense_x * expense_y
-
 
 product_of_three_expenses_that_sum_to_2020 = |expenses|
   for x in 0..expenses.size()
@@ -29,7 +24,6 @@ product_of_three_expenses_that_sum_to_2020 = |expenses|
         if expense_x + expense_y + expense_z == 2020
           return expense_x * expense_y * expense_z
 
-
 @main = ||
   input = io.extend_path koto.script_dir, "input", "01"
     >> io.read_to_string
@@ -40,7 +34,6 @@ product_of_three_expenses_that_sum_to_2020 = |expenses|
 
   part_two = product_of_three_expenses_that_sum_to_2020 input
   print "Part two: $part_two" # 236430480
-
 
 @tests =
   @pre_test: |self|

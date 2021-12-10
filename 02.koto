@@ -1,8 +1,5 @@
 # https://adventofcode.com/2020/day/2
 
-import io.print, test.assert_eq
-
-
 parse_password = |line|
   policy = {}
 
@@ -22,13 +19,11 @@ parse_password = |line|
 
   policy, password
 
-
 parse_input = |input|
   input
     .lines()
     .each |line| parse_password line
     .to_tuple()
-
 
 count_valid_passwords_part_one = |input|
   input
@@ -38,7 +33,6 @@ count_valid_passwords_part_one = |input|
         .count()
       policy.required_min <= letter_count <= policy.required_max
     .count()
-
 
 count_valid_passwords_part_two = |input|
   input
@@ -52,14 +46,12 @@ count_valid_passwords_part_two = |input|
       matches == 1
     .count()
 
-
 @main = ||
   input = io.extend_path koto.script_dir, "input", "02"
     >> io.read_to_string
     >> parse_input
   print "Part one: ${count_valid_passwords_part_one input}" # 638
   print "Part two: ${count_valid_passwords_part_two input}" # 699
-
 
 @tests =
   @pre_test: |self|

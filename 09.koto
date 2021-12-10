@@ -1,8 +1,5 @@
 # https://adventofcode.com/2020/day/9
 
-import io.print
-from test import assert, assert_eq
-
 ring_buffer = |capacity|
   data: []
   capacity: capacity

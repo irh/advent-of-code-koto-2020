@@ -1,7 +1,5 @@
 # https://adventofcode.com/2020/day/14
 
-import io.print, test.assert_eq
-
 play_game = |start_numbers, turn_count|
   last_number = ()
   turn = 1
