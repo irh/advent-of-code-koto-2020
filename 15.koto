@@ -18,11 +18,11 @@ play_game = |start_numbers, turn_count|
       [y, z] then z - y
 
     match numbers[spoken_number]
-      ()
+      () then
         numbers[spoken_number] = [turn]
-      turns if turns.size() == 1
+      turns if turns.size() == 1 then
         turns.push turn
-      turns
+      turns then
         turns[0] = turns[1]
         turns[1] = turn
 

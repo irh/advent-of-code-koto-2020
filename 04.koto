@@ -36,7 +36,7 @@ passport_is_valid_part_two = |passport|
       "byr" then if not 1920 <= value.to_number() <= 2002 then return false
       "iyr" then if not 2010 <= value.to_number() <= 2020 then return false
       "eyr" then if not 2020 <= value.to_number() <= 2030 then return false
-      "hgt"
+      "hgt" then
         end_of_number = value.position |c| not is_digit c
         if end_of_number == () then return false
         n = (value.slice 0, end_of_number).to_number()
@@ -45,13 +45,13 @@ passport_is_valid_part_two = |passport|
           "cm" then if not 150 <= n <= 193 then return false
           "in" then if not 59 <= n <= 76 then return false
           _ then return false
-      "hcl"
+      "hcl" then
         if (value.slice 0, 1) != "#" then return false
         color = value.slice 1
         if color.size() != 6 then return false
         if not color.all(|c| "0123456789abcdef".contains c) then return false
       "ecl" then if not (eye_colours.contains value) then return false
-      "pid"
+      "pid" then
         if value.size() != 9 then return false
         if not value.all(|digit| is_digit digit) then return false
   true

@@ -26,12 +26,12 @@ evaluate_expression = |tokens, ops, min_priority|
     token = tokens.peek()
     match token
       () or ")" then break
-      "("
+      "(" then
         tokens.next()
         # Parse the nested expression, starting with minimum priority of 0
         lhs = evaluate_expression tokens, ops, 0
         assert_eq tokens.next(), ")" # consume the end )
-      peeked_op if ops.contains_key peeked_op
+      peeked_op if ops.contains_key peeked_op then
         # Check if the op has sufficient priority to continue
         left_priority, right_priority = ops.get peeked_op
         if left_priority < min_priority
@@ -43,7 +43,7 @@ evaluate_expression = |tokens, ops, min_priority|
         lhs = match op
           "+" then lhs + rhs
           "*" then lhs * rhs
-      n
+      n then
         tokens.next()
         lhs = n.to_number()
   lhs

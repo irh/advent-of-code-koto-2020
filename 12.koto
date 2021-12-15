@@ -1,9 +1,9 @@
 # https://adventofcode.com/2020/day/12
 
-north = num2 0, 1
-south = num2 0, -1
-east  = num2 1, 0
-west  = num2 -1, 0
+north = make_num2 0, 1
+south = make_num2 0, -1
+east  = make_num2 1, 0
+west  = make_num2 -1, 0
 
 parse_instructions = |input|
   input.lines()
@@ -15,12 +15,12 @@ parse_instructions = |input|
 
 rotate_clockwise = |xy, degrees|
   match degrees
-    90 then num2 xy[1], -xy[0]
+    90 then make_num2 xy[1], -xy[0]
     180 then -xy
-    270 then num2 -xy[1], xy[0]
+    270 then make_num2 -xy[1], xy[0]
 
 run_instructions_part_one = |instructions|
-  ship, direction = (num2 0, 0), east
+  ship, direction = (make_num2 0, 0), east
   for action, value in instructions
     match action
       "N" then ship += north * value
@@ -33,7 +33,7 @@ run_instructions_part_one = |instructions|
   (ship[0].abs() + ship[1].abs()).to_int()
 
 run_instructions_part_two = |instructions|
-  ship, waypoint = (num2 0, 0), (num2 10, 1)
+  ship, waypoint = (make_num2 0, 0), (make_num2 10, 1)
   for action, value in instructions
     match action
       "N" then waypoint += north * value

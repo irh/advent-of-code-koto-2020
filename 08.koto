@@ -10,7 +10,7 @@ parse_program = |input|
     .each |line|
       op = ops.get (line.slice 0, 3)
       value = line.slice(4).to_number()
-      num2 op, value
+      make_num2 op, value
     .to_tuple()
 
 run_program = |program|
@@ -21,12 +21,12 @@ run_program = |program|
     op, value = program[ip]
     visited[ip] = true
     match op
-      ops.nop
+      ops.nop then
         ip += 1
-      ops.acc
+      ops.acc then
         acc += value
         ip += 1
-      ops.jmp
+      ops.jmp then
         ip += value
   acc.to_int(), ip >= program.size()
 
@@ -38,7 +38,7 @@ fix_program_and_get_result = |program|
       ops.jmp then ops.nop
       else continue
     fixed = program.to_list()
-    fixed[ip] = num2 new_op, value
+    fixed[ip] = make_num2 new_op, value
     result, terminated = run_program fixed
     if terminated
       return result

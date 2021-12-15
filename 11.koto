@@ -5,9 +5,9 @@ import enum.make_enum
 cell = make_enum "floor", "empty", "occupied"
 
 directions =
-  (num2 -1, -1), (num2 0, -1), (num2 1, -1),
-  (num2 -1,  0),               (num2 1,  0),
-  (num2 -1,  1), (num2 0,  1), (num2 1,  1),
+  (make_num2 -1, -1), (make_num2 0, -1), (make_num2 1, -1),
+  (make_num2 -1,  0),                    (make_num2 1,  0),
+  (make_num2 -1,  1), (make_num2 0,  1), (make_num2 1,  1),
 
 make_floor_grid = |input|
   grid, row_count, row_size = input
@@ -55,10 +55,10 @@ make_floor_grid = |input|
               occupied_count += 1
 
           temp_grid[index] = match state
-            cell.empty if occupied_count == 0
+            cell.empty if occupied_count == 0 then
               state_changed = true
               cell.occupied
-            cell.occupied if occupied_count >= 4
+            cell.occupied if occupied_count >= 4 then
               state_changed = true
               cell.empty
             else state
@@ -88,17 +88,16 @@ make_floor_grid = |input|
               if not 0 <= dy < row_count
                 break
               match grid[dy * row_size + dx]
-                cell.empty
-                  break
-                cell.occupied
+                cell.empty then break
+                cell.occupied then
                   occupied_count += 1
                   break
 
           temp_grid[index] = match state
-            cell.empty if occupied_count == 0
+            cell.empty if occupied_count == 0 then
               state_changed = true
               cell.occupied
-            cell.occupied if occupied_count >= 5
+            cell.occupied if occupied_count >= 5 then
               state_changed = true
               cell.empty
             else state

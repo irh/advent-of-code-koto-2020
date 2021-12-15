@@ -10,7 +10,7 @@ parse_input = |input|
     rest = rest.trim()
     first_char = rest.chars().next()
     match first_char
-      '"'
+      '"' then
         char = rest.slice 1, (rest.size() - 1)
         rules.insert id, {char}
       else
@@ -18,7 +18,7 @@ parse_input = |input|
         sequence = []
         for token in rest.split " "
           match token
-            "|"
+            "|" then
               sequences.push sequence.copy()
               sequence.clear()
             else
@@ -37,27 +37,27 @@ message_checker = |rules|
 
   match_rules: |self, message, rule_ids|
     match rule_ids.is_empty(), message.is_empty()
-      true, true
+      true, true then
         return true
-      true, false or false, true
+      true, false or false, true then
         return false
 
     rule_id = rule_ids.remove 0
     rule = self.rules.get rule_id
     match rule.get "sequences"
-      ()
+      () then
         char = rule.get "char"
         self.match_char char, message, rule_ids
-      [sequence]
+      [sequence] then
         self.match_sequence sequence, message, rule_ids
-      [sequence_a, sequence_b]
+      [sequence_a, sequence_b] then
         self.match_sequence(sequence_a, message, rule_ids)
           or self.match_sequence(sequence_b, message, rule_ids)
       else throw "Unsupported rule"
 
   match_char: |self, char, message, rule_ids|
     match message.chars().next()
-      c if c == char
+      c if c == char then
         remaining_message = message[1..]
         self.match_rules remaining_message, rule_ids
       else false

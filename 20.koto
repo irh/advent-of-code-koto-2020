@@ -61,7 +61,8 @@ corner_ids = |edge_map|
   unique_edge_count = {}
   for edge_id, tile_ids in edge_map
     match tile_ids
-      [unique] then unique_edge_count.update unique, 0, |count| count += 1
+      [unique] then
+        unique_edge_count.update unique, 0, |count| count += 1
   unique_edge_count
     .keep |(tile_id, count)| count == 4 # 2 unique edges, * 2 for flipping
     .each |(tile_id, _)| tile_id
