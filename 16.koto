@@ -53,14 +53,14 @@ scanning_error_rate = |fields, tickets|
   tickets
     .each |ticket|
       match find_invalid_field ticket, fields
-        () then 0
+        null then 0
         n then n
     .sum()
 
 assign_field_ids = |fields, tickets|
   # identify which tickets are valid
   valid_tickets = tickets
-    .keep |ticket| (find_invalid_field ticket, fields) == ()
+    .keep |ticket| not find_invalid_field ticket, fields
     .to_tuple()
 
   # find out which fields could be a match for each column

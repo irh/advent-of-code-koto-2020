@@ -1,7 +1,7 @@
 # https://adventofcode.com/2020/day/14
 
 play_game = |start_numbers, turn_count|
-  last_number = ()
+  last_number = null
   turn = 1
   numbers = list.with_size turn_count, ()
 
@@ -14,11 +14,11 @@ play_game = |start_numbers, turn_count|
   # Now play the game for the specified number of turns
   for _ in 0..turn_count - start_numbers.size()
     spoken_number = match numbers[last_number]
-      () or [_] then 0
+      null or [_] then 0
       [y, z] then z - y
 
     match numbers[spoken_number]
-      () then
+      null then
         numbers[spoken_number] = [turn]
       turns if turns.size() == 1 then
         turns.push turn

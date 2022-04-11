@@ -13,7 +13,7 @@ parse_bag_rules = |input|
       contained_bags = {}
       loop
         match words.next()
-          "no" or () then break
+          "no" or null then break
           quantity then
             contained_bag = "${words.next()} ${words.next()}"
             contained_bags.insert contained_bag, quantity.to_number()

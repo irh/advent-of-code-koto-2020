@@ -32,11 +32,11 @@ parse_program = |input|
             .chars()
             .each |c|
               match c
-                "X" then ()
+                "X" then null
                 "0" then 0
                 "1" then 1
             .to_tuple()
-          commands.mask, mask, ()
+          commands.mask, mask, null
         mem then
           # e.g. mem[43816] = 123
           index = mem
@@ -54,10 +54,10 @@ apply_mask_to_value = |value, mask|
   bits_to_int value_bits
     .zip(mask)
     .each |(value_bit, mask_bit)|
-      if mask_bit == ()
-        value_bit
-      else
+      if mask_bit
         mask_bit
+      else
+        value_bit
     .to_tuple()
 
 index_decoder = |index, mask|
@@ -67,7 +67,7 @@ index_decoder = |index, mask|
       result.push match mask_bit
         0 then index_bit
         1 then 1
-        () then floating_bits.push result.size()
+        null then floating_bits.push result.size()
       result, floating_bits
   floating_count = floating_bits.size()
 
@@ -80,7 +80,7 @@ index_decoder = |index, mask|
 
 run_program = |program, version|
   memory = {}
-  mask = ()
+  mask = null
   for command, value_1, value_2 in program
     match command
       commands.mask then mask = value_1

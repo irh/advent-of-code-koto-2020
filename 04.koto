@@ -31,14 +31,14 @@ passport_is_valid_part_one = |passport|
 passport_is_valid_part_two = |passport|
   for field in expected_fields
     value = passport.get field
-    if value == () then return false
+    if not value then return false
     match field
       "byr" then if not 1920 <= value.to_number() <= 2002 then return false
       "iyr" then if not 2010 <= value.to_number() <= 2020 then return false
       "eyr" then if not 2020 <= value.to_number() <= 2030 then return false
       "hgt" then
         end_of_number = value.position |c| not is_digit c
-        if end_of_number == () then return false
+        if not end_of_number then return false
         n = (value.slice 0, end_of_number).to_number()
         unit = value.slice end_of_number
         match unit
