@@ -108,13 +108,11 @@ make_floor_grid = |input|
       result = 0
       while self.fill_seats_part_one()
         result += 1
-      result
 
     fill_seats_until_stable_part_two: |self|
       result = 0
       while self.fill_seats_part_two()
         result += 1
-      result
 
     occupied_seats_count: |self|
       self.grid

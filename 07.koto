@@ -13,12 +13,12 @@ parse_bag_rules = |input|
       contained_bags = {}
       loop
         match words.next()
-          "no" or null then break
+          "no" or null then 
+            break bag, contained_bags
           quantity then
             contained_bag = "${words.next()} ${words.next()}"
             contained_bags.insert contained_bag, quantity.to_number()
             words.next() # bag(s)
-      bag, contained_bags
     .to_map()
 
 count_bag_options = |target_bag, rules|

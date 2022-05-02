@@ -39,7 +39,7 @@ count_arrangements = |adapters|
   arrangements.last()
 
 @main = ||
-  adapters = io.extend_path koto.script_dir, "input", "10"
+  adapters = io.extend_path script_dir, "input", "10"
     >> read_to_string
     >> parse_input
   differences = joltage_differences adapters

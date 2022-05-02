@@ -47,7 +47,7 @@ find_invalid_field = |ticket, fields|
         .any |rule| rule.contains n
     if not is_valid
       return n
-  ()
+  null
 
 scanning_error_rate = |fields, tickets|
   tickets
@@ -73,7 +73,6 @@ assign_field_ids = |fields, tickets|
       if could_be_a_match
         field.update "possible_ids", [], |possible_ids|
           possible_ids.push i
-          possible_ids
 
   # Assign field ids by sorting them in order of number of possibilities,
   # the first field will have a single option which can be assigned,

@@ -45,7 +45,7 @@ message_checker = |rules|
     rule_id = rule_ids.remove 0
     rule = self.rules.get rule_id
     match rule.get "sequences"
-      () then
+      null then
         char = rule.get "char"
         self.match_char char, message, rule_ids
       [sequence] then

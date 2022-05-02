@@ -25,7 +25,8 @@ evaluate_expression = |tokens, ops, min_priority|
     # Peek the next token to see if it should be consumed as part of this expression
     token = tokens.peek()
     match token
-      null or ")" then break
+      null or ")" then 
+        break lhs
       "(" then
         tokens.next()
         # Parse the nested expression, starting with minimum priority of 0
@@ -35,7 +36,7 @@ evaluate_expression = |tokens, ops, min_priority|
         # Check if the op has sufficient priority to continue
         left_priority, right_priority = ops.get peeked_op
         if left_priority < min_priority
-          break
+          break lhs
         # Consume the op token and evaluate the rhs
         tokens.next()
         op = peeked_op
@@ -46,7 +47,6 @@ evaluate_expression = |tokens, ops, min_priority|
       n then
         tokens.next()
         lhs = n.to_number()
-  lhs
 
 evaluate_1 = |input|
   # + and * have the same priority

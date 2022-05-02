@@ -10,8 +10,7 @@ count_answers_part_one = |answers|
     else
       for answer in line
         answers_for_group.insert answer
-  result += answers_for_group.size()
-  result
+  result + answers_for_group.size()
 
 count_answers_part_two = |answers|
   count_for_group = |people_in_group, answers_for_group|
@@ -31,8 +30,7 @@ count_answers_part_two = |answers|
       people_in_group += 1
       for answer in line
         answers_for_group.update answer, 0, |count| count + 1
-  result += count_for_group people_in_group, answers_for_group
-  result
+  result + count_for_group people_in_group, answers_for_group
 
 @main = ||
   input = io.read_to_string io.extend_path koto.script_dir, "input", "06"

@@ -94,11 +94,9 @@ parse_input = |input|
     tiles.push make_tile tile_id, grid
 
     match lines.next()
-      null then break
+      null then break tiles
       "" then continue
       other then throw "Expected empty line, got '{}'".format other
-
-  tiles
 
 @main = ||
   tiles = io.extend_path koto.script_dir, "input", "20"
