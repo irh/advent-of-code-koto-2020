@@ -1,21 +1,21 @@
 # https://adventofcode.com/2020/day/17
 
 generate_local_3d = ||
-  origin = make_num4 0
+  origin = (0, 0, 0)
   for x in -1..=1
     for y in -1..=1
       for z in -1..=1
-        position = make_num4 x, y, z
+        position = x, y, z
         if position != origin
           yield position
 
 generate_local_4d = ||
-  origin = make_num4 0
+  origin = (0, 0, 0, 0)
   for x in -1..=1
     for y in -1..=1
       for z in -1..=1
         for w in -1..=1
-          position = make_num4 x, y, z, w
+          position = x, y, z, w
           if position != origin
             yield position
 
@@ -32,11 +32,10 @@ parse_grid = |input|
           grid
 
 cycle_grid = |grid, local_positions|
-  positions_to_check = grid.fold {}, |result, (position, _)|
-    result.insert position
+  positions_to_check = grid.fold [], |result, (position, _)|
+    result.push position
     local_positions.fold result, |result, local|
-      result.insert (position + local)
-      result
+      result.push (position + local)
 
   positions_to_check.fold {}, |result, (position, _)|
     active_neighbours = local_positions
