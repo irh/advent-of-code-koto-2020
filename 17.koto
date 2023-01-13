@@ -1,54 +1,61 @@
 # https://adventofcode.com/2020/day/17
 
+import set
+
 generate_local_3d = ||
-  origin = make_num4 0
+  origin = (0, 0, 0, 0)
   for x in -1..=1
     for y in -1..=1
       for z in -1..=1
-        position = make_num4 x, y, z
+        position = x, y, z, 0
         if position != origin
           yield position
 
 generate_local_4d = ||
-  origin = make_num4 0
+  origin = (0, 0, 0, 0)
   for x in -1..=1
     for y in -1..=1
       for z in -1..=1
         for w in -1..=1
-          position = make_num4 x, y, z, w
+          position = x, y, z, w
           if position != origin
             yield position
 
 local_3d = generate_local_3d().to_tuple()
 local_4d = generate_local_4d().to_tuple()
 
+element_wise_sum = |a, b| a.zip(b).each(|(x, y)| x + y).to_tuple()
+
 parse_grid = |input|
-  input.lines().enumerate()
-    .fold {}, |grid, (y, line)|
+  result = input.lines().enumerate()
+    .each |(y, line)|
       line.chars().enumerate()
-        .fold grid, |grid, (x, c)|
-          if c == "#"
-            grid.insert (make_num4 x, y)
-          grid
+        .keep |(_, c)| c == '#'
+        .each |(x, c)| (x, y, 0, 0)
+    .flatten()
+    .to_set()
+  result
 
 cycle_grid = |grid, local_positions|
-  positions_to_check = grid.fold {}, |result, (position, _)|
-    result.insert position
-    local_positions.fold result, |result, local|
-      result.insert (position + local)
-      result
-
-  positions_to_check.fold {}, |result, (position, _)|
-    active_neighbours = local_positions
-      .keep |local| grid.contains_key(position + local)
-      .count()
-    cube_is_active = match active_neighbours
-      3 then true
-      2 if grid.contains_key(position) then true
-      else false
-    if cube_is_active
-      result.insert position
-    result
+  grid
+    .each |position|
+      local_positions
+        .each |local| element_wise_sum position, local
+    .flatten()
+    .keep |position|
+      # debug position
+      active_neighbours = local_positions
+        .keep |local|
+          shifted = element_wise_sum position, local
+          # debug grid.get shifted
+          # debug grid.contains_key shifted
+          grid.contains shifted
+        .count()
+      match active_neighbours
+        3 then true
+        2 if grid.contains(position) then true
+        else false
+    .to_set()
 
 
 cycle_grid_3d = |grid|

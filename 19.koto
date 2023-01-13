@@ -11,7 +11,7 @@ parse_input = |input|
     first_char = rest.chars().next()
     match first_char
       '"' then
-        char = rest.slice 1, (rest.size() - 1)
+        char = rest[1..(rest.size() - 1)]
         rules.insert id, {char}
       else
         sequences = []
@@ -63,7 +63,7 @@ message_checker = |rules|
       else false
 
   match_sequence: |self, sequence, message, remaining_ids|
-    combined_ids = sequence + remaining_ids
+    combined_ids = sequence.chain(remaining_ids).to_list()
     self.match_rules message, combined_ids
 
 valid_message_count = |rules, messages|

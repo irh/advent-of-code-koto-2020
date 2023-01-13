@@ -8,9 +8,9 @@ parse_program = |input|
   input
     .lines()
     .each |line|
-      op = ops.get (line.slice 0, 3)
-      value = line.slice(4).to_number()
-      make_num2 op, value
+      op = ops.get line[..3]
+      value = line[4..].to_number()
+      op, value
     .to_tuple()
 
 run_program = |program|
@@ -38,7 +38,7 @@ fix_program_and_get_result = |program|
       ops.jmp then ops.nop
       else continue
     fixed = program.to_list()
-    fixed[ip] = make_num2 new_op, value
+    fixed[ip] = new_op, value
     result, terminated = run_program fixed
     if terminated
       return result

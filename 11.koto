@@ -5,9 +5,9 @@ import enum.make_enum
 cell = make_enum "floor", "empty", "occupied"
 
 directions =
-  (make_num2 -1, -1), (make_num2 0, -1), (make_num2 1, -1),
-  (make_num2 -1,  0),                    (make_num2 1,  0),
-  (make_num2 -1,  1), (make_num2 0,  1), (make_num2 1,  1),
+  (-1, -1), (0, -1), (1, -1),
+  (-1,  0),          (1,  0),
+  (-1,  1), (0,  1), (1,  1),
 
 make_floor_grid = |input|
   grid, row_count, row_size = input
@@ -21,7 +21,7 @@ make_floor_grid = |input|
             "L" then cell.empty
             "#" then cell.occupied
         .to_list()
-      (grid + row, row_count + 1, row.size())
+      (grid.extend(row), row_count + 1, row.size())
 
   return
     grid: grid

@@ -39,8 +39,7 @@ parse_program = |input|
           commands.mask, mask, null
         mem then
           # e.g. mem[43816] = 123
-          index = mem
-            .slice 4
+          index = mem[4..]
             .split "]"
             .next()
             .to_number()
