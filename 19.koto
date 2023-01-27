@@ -32,10 +32,10 @@ parse_input = |input|
 message_checker = |rules|
   rules: rules
 
-  check_message: |self, message|
+  check_message: |message|
     self.match_rules message, [0]
 
-  match_rules: |self, message, rule_ids|
+  match_rules: |message, rule_ids|
     match rule_ids.is_empty(), message.is_empty()
       true, true then
         return true
@@ -55,14 +55,14 @@ message_checker = |rules|
           or self.match_sequence(sequence_b, message, rule_ids)
       else throw "Unsupported rule"
 
-  match_char: |self, char, message, rule_ids|
+  match_char: |char, message, rule_ids|
     match message.chars().next()
       c if c == char then
         remaining_message = message[1..]
         self.match_rules remaining_message, rule_ids
       else false
 
-  match_sequence: |self, sequence, message, remaining_ids|
+  match_sequence: |sequence, message, remaining_ids|
     combined_ids = sequence.chain(remaining_ids).to_list()
     self.match_rules message, combined_ids
 
@@ -85,7 +85,7 @@ update_rules = |rules|
   print "Part two: ${valid_message_count rules, messages}" # 384
 
 @tests =
-  @test part_one: |self|
+  @test part_one: ||
     rules, messages =
       parse_input io.read_to_string koto.script_dir + "/input/19-example-1"
     checker = message_checker rules
@@ -96,7 +96,7 @@ update_rules = |rules|
     assert not checker.check_message "aaaabbb"
     assert_eq (valid_message_count rules, messages), 2
 
-  @test part_two: |self|
+  @test part_two: ||
     rules, messages =
       parse_input io.read_to_string koto.script_dir + "/input/19-example-2"
     assert_eq (valid_message_count rules, messages), 3

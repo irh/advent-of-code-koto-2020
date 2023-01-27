@@ -1,6 +1,7 @@
 # https://adventofcode.com/2020/day/17
 
 import set
+import map.deep_copy
 
 generate_local_3d = ||
   origin = (0, 0, 0, 0)
@@ -73,19 +74,19 @@ cycle_grid_4d = |grid|
     >> io.read_to_string
     >> parse_grid
 
-  print "Part one: ${cycle_grid_3d grid.deep_copy()}" # 382
+  print "Part one: ${cycle_grid_3d deep_copy grid}" # 382
   print "Part two: ${cycle_grid_4d grid}" # 2552
 
 @tests =
-  @pre_test: |self|
+  @pre_test: ||
     self.grid = parse_grid "\
 .#.
 ..#
 ###
 "
 
-  @test part_one: |self|
+  @test part_one: ||
     assert_eq (cycle_grid_3d self.grid), 112
 
-  @test part_two: |self|
+  @test part_two: ||
     assert_eq (cycle_grid_4d self.grid), 848

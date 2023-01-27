@@ -34,7 +34,7 @@ check_slopes_and_multiply_tree_counts  = |grid|
   print "Part two: ${check_slopes_and_multiply_tree_counts input}" # 1592662500
 
 @tests =
-  @pre_test: |self|
+  @pre_test: ||
     self.input = parse_input "\
 ..##.......
 #...#...#..
@@ -49,14 +49,14 @@ check_slopes_and_multiply_tree_counts  = |grid|
 .#..#...#.#
 "
 
-  @test parse_input: |self|
+  @test parse_input: ||
     assert self.input[0][2]
     assert self.input[1][4]
     assert not self.input[0][1]
     assert not self.input[4][2]
 
-  @test part_one: |self|
+  @test part_one: ||
     assert_eq (count_trees_on_grid self.input, (3, 1)), 7
 
-  @test part_two: |self|
+  @test part_two: ||
     assert_eq (check_slopes_and_multiply_tree_counts self.input), 336

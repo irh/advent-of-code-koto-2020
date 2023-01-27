@@ -1,13 +1,13 @@
 export make_set = |values|
   data: if not values then {} else values.to_map()
-  contains: |self, value| self.data.contains_key value
+  contains: |value| self.data.contains_key value
   contains_key: || throw "Use contains, not contains_key"
-  insert: |self, value|
+  insert: |value|
     self.data.insert value
     self
-  is_empty: |self| self.size() == 0
-  size: |self| self.data.size()
+  is_empty: || self.size() == 0
+  size: || self.data.size()
 
-  @iterator: |self| self.data.keys()
+  @iterator: || self.data.keys()
 
-iterator.to_set = |iter| make_set iter
+iterator.to_set = || make_set self

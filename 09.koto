@@ -5,16 +5,16 @@ ring_buffer = |capacity|
   capacity: capacity
   start: 0
 
-  size: |self| self.data.size()
+  size: || self.data.size()
 
-  push: |self, x|
+  push: |x|
     if self.size() < self.capacity
       self.data.push x
     else
       self.data[self.start] = x
       self.start = (self.start + 1) % self.capacity
 
-  get: |self, index|
+  get: |index|
     self.data.get ((self.start + index) % self.capacity)
 
 parse_input = |input|
@@ -60,7 +60,7 @@ find_encryption_weakness = |input, buffer_size|
   print "Part two: ${find_encryption_weakness input, 25}" # 268878261
 
 @tests =
-  @pre_test: |self|
+  @pre_test: ||
     self.input = parse_input "\
 35
 20
@@ -104,9 +104,9 @@ find_encryption_weakness = |input, buffer_size|
     assert input_is_valid buffer, 64
     assert input_is_valid buffer, 66
 
-  @test part_one_example_two: |self|
+  @test part_one_example_two: ||
     assert_eq (find_first_invalid_input self.input, 5), 127
 
-  @test part_two: |self|
+  @test part_two: ||
     assert_eq (find_encryption_weakness self.input, 5), 62
 

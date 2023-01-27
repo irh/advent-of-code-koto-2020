@@ -62,7 +62,7 @@ find_contest_time = |bus_ids|
   print "Part two: ${find_contest_time bus_ids}" # 836024966345345
 
 @tests =
-  @pre_test: |self|
+  @pre_test: ||
     bus_notes = parse_bus_notes "\
 939
 7,13,x,x,59,x,31,19
@@ -70,12 +70,12 @@ find_contest_time = |bus_ids|
     self.start_time = bus_notes[0]
     self.bus_ids = bus_notes[1]
 
-  @test part_one: |self|
+  @test part_one: ||
     bus, wait_time = (wait_time_for_next_bus self.bus_ids, self.start_time)
     assert_eq bus, 59
     assert_eq wait_time, 5
 
-  @test part_two: |self|
+  @test part_two: ||
     assert_eq (find_contest_time self.bus_ids), 1068781
 
     _, bus_ids = parse_bus_notes "\

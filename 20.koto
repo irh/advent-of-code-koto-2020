@@ -14,7 +14,7 @@ make_tile = |tile_id, grid|
   tile_id: tile_id
   grid: grid
 
-  edges: |self|
+  edges: ||
     edge_ids = |edge|
       # TODO it would be nice to have iterator.reverse() here
       edge = edge.to_list()
@@ -38,7 +38,7 @@ make_tile = |tile_id, grid|
     yield ids.next()
     yield ids.next()
 
-  @display: |self|
+  @display: ||
     row_to_string = |row|
       row
         .each |cell| if cell == 1 then "#" else "."
@@ -105,7 +105,7 @@ parse_input = |input|
   print "Part one: ${part_one tiles}" # 51214443014783
 
 @tests =
-  @test part_one: |self|
+  @test part_one: ||
     path = io.extend_path koto.script_dir, "input", "20-example"
     tiles = parse_input io.read_to_string path
     assert_eq tiles.size(), 9

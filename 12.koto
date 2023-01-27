@@ -55,7 +55,7 @@ run_instructions_part_two = |instructions|
   print "Part two: ${run_instructions_part_two instructions}" # 50157
 
 @tests =
-  @pre_test: |self|
+  @pre_test: ||
     self.instructions = parse_instructions "\
 F10
 N3
@@ -64,8 +64,8 @@ R90
 F11
 "
 
-  @test part_one: |self|
+  @test part_one: ||
     assert_eq (run_instructions_part_one self.instructions), 25
 
-  @test part_two: |self|
+  @test part_two: ||
     assert_eq (run_instructions_part_two self.instructions), 286

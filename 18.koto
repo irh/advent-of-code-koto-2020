@@ -4,7 +4,7 @@ peekable_tokens = |expression|
   iter: expression.chars().keep |c| c != " "
   peeked: null
 
-  next: |self|
+  next: ||
     match self.peeked
       null then
         self.iter.next()
@@ -12,7 +12,7 @@ peekable_tokens = |expression|
         self.peeked = null
         peeked
 
-  peek: |self|
+  peek: ||
     if not self.peeked
       self.peeked = self.iter.next()
     self.peeked
@@ -25,7 +25,7 @@ evaluate_expression = |tokens, ops, min_priority|
     # Peek the next token to see if it should be consumed as part of this expression
     token = tokens.peek()
     match token
-      null or ")" then 
+      null or ")" then
         break lhs
       "(" then
         tokens.next()
@@ -79,12 +79,12 @@ evaluate_2 = |input|
   print "Part two: $part_two" # 328920644404583
 
 @tests =
-  @test part_one: |self|
+  @test part_one: ||
     assert_eq (evaluate_1 "1 + 2 * 3 + 4 * 5 + 6"), 71
     assert_eq (evaluate_1 "1 + (2 * 3) + (4 * (5 + 6))"), 51
     assert_eq (evaluate_1 "((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2"), 13632
 
-  @test part_two: |self|
+  @test part_two: ||
     assert_eq (evaluate_2 "1 + 2 * 3 + 4 * 5 + 6"), 231
     assert_eq (evaluate_2 "1 + (2 * 3) + (4 * (5 + 6))"), 51
     assert_eq (evaluate_2 "((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2"), 23340

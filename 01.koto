@@ -36,7 +36,7 @@ product_of_three_expenses_that_sum_to_2020 = |expenses|
   print "Part two: $part_two" # 236430480
 
 @tests =
-  @pre_test: |self|
+  @pre_test: ||
     self.input = "\
 1721
 979
@@ -45,12 +45,12 @@ product_of_three_expenses_that_sum_to_2020 = |expenses|
 675
 1456"
 
-  @test part_one: |self|
+  @test part_one: ||
     expenses = parse_expenses self.input
     result = product_of_two_expenses_that_sum_to_2020 expenses
     assert_eq result, 514579
 
-  @test part_two: |self|
+  @test part_two: ||
     expenses = parse_expenses self.input
     result = product_of_three_expenses_that_sum_to_2020 expenses
     assert_eq result, 241861950

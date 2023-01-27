@@ -39,7 +39,7 @@ count_answers_part_two = |answers|
   print "Part two: ${count_answers_part_two input}" # 3493
 
 @tests =
-  @pre_test: |self|
+  @pre_test: ||
     self.input = "\
 abc
 
@@ -57,8 +57,8 @@ a
 
 b"
 
-  @test part_one: |self|
+  @test part_one: ||
     assert_eq (count_answers_part_one self.input), 11
 
-  @test part_two: |self|
+  @test part_two: ||
     assert_eq (count_answers_part_two self.input), 6

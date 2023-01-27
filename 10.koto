@@ -47,13 +47,13 @@ count_arrangements = |adapters|
   print "Part two: ${count_arrangements adapters}" # 28346956187648
 
 @tests =
-  @pre_test: |self|
+  @pre_test: ||
     self.adapters_1 =
       parse_input read_to_string extend_path script_dir, "input", "10-example-1"
     self.adapters_2 =
       parse_input read_to_string extend_path script_dir, "input", "10-example-2"
 
-  @test part_one: |self|
+  @test part_one: ||
     differences = joltage_differences self.adapters_1
     assert_eq differences[1], 7
     assert_eq differences[3], 5
@@ -62,6 +62,6 @@ count_arrangements = |adapters|
     assert_eq differences[1], 22
     assert_eq differences[3], 10
 
-  @test part_two: |self|
+  @test part_two: ||
     assert_eq (count_arrangements self.adapters_1), 8
     assert_eq (count_arrangements self.adapters_2), 19208

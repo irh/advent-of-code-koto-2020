@@ -30,7 +30,7 @@ make_floor_grid = |input|
     row_size: row_size
     row_count: row_count
 
-    fill_seats_part_one: |self|
+    fill_seats_part_one: ||
       grid, temp_grid = self.grid, self.temp_grid
       row_size, row_count = self.row_size, self.row_count
       state_changed = false
@@ -65,7 +65,7 @@ make_floor_grid = |input|
       grid.swap temp_grid
       state_changed
 
-    fill_seats_part_two: |self|
+    fill_seats_part_two: ||
       grid, temp_grid = self.grid, self.temp_grid
       row_size, row_count = self.row_size, self.row_count
       state_changed = false
@@ -104,22 +104,22 @@ make_floor_grid = |input|
       grid.swap temp_grid
       state_changed
 
-    fill_seats_until_stable_part_one: |self|
+    fill_seats_until_stable_part_one: ||
       result = 0
       while self.fill_seats_part_one()
         result += 1
 
-    fill_seats_until_stable_part_two: |self|
+    fill_seats_until_stable_part_two: ||
       result = 0
       while self.fill_seats_part_two()
         result += 1
 
-    occupied_seats_count: |self|
+    occupied_seats_count: ||
       self.grid
         .keep |position| position == cell.occupied
         .count()
 
-    to_string: |self|
+    to_string: ||
       result = ""
       for y in 0..self.row_count
         for x in 0..self.row_size
@@ -145,7 +145,7 @@ make_floor_grid = |input|
   print "- occupied seats: ${part_two.occupied_seats_count()}" # 2039
 
 @tests =
-  @pre_test: |self|
+  @pre_test: ||
     self.grid = make_floor_grid "\
 L.LL.LL.LL
 LLLLLLL.LL
@@ -159,10 +159,10 @@ L.LLLLLL.L
 L.LLLLL.LL
 "
 
-  @test part_one: |self|
+  @test part_one: ||
     assert_eq self.grid.fill_seats_until_stable_part_one(), 5
     assert_eq self.grid.occupied_seats_count(), 37
 
-  @test part_two: |self|
+  @test part_two: ||
     assert_eq self.grid.fill_seats_until_stable_part_two(), 6
     assert_eq self.grid.occupied_seats_count(), 26
