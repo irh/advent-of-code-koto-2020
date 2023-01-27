@@ -1,13 +1,25 @@
-export make_set = |values|
-  data: if not values then {} else values.to_map()
-  contains: |value| self.data.contains_key value
-  contains_key: || throw "Use contains, not contains_key"
-  insert: |value|
-    self.data.insert value
-    self
-  is_empty: || self.size() == 0
-  size: || self.data.size()
+set_meta =
+    @type: 'Set'
+    @iterator: || self.data.keys()
 
-  @iterator: || self.data.keys()
+    @meta contains: |value|
+      self.data.contains_key value
+
+    @meta insert: |value|
+      self.data.insert value
+      self
+
+    @meta is_empty: || self.size() == 0
+
+    @meta size: || self.data.size()
+
+export make_set = |values|
+  data = {}
+
+  if values != null
+    for value in values
+      data.insert value
+
+  {data}.with_meta_map set_meta
 
 iterator.to_set = || make_set self
