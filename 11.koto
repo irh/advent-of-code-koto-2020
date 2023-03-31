@@ -25,7 +25,7 @@ make_floor_grid = |input|
 
   return
     grid: grid
-    temp_grid: grid.copy()
+    temp_grid: copy grid
 
     row_size: row_size
     row_count: row_count
@@ -134,7 +134,7 @@ make_floor_grid = |input|
     >> io.read_to_string
     >> make_floor_grid
 
-  part_one = grid.deep_copy()
+  part_one = deep_copy grid
   print "Part one"
   print "- seats stabilised in ${part_one.fill_seats_until_stable_part_one()} steps"
   print "- occupied seats: ${part_one.occupied_seats_count()}" # 2261

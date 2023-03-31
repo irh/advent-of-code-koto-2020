@@ -19,7 +19,7 @@ parse_input = |input|
         for token in rest.split " "
           match token
             "|" then
-              sequences.push sequence.copy()
+              sequences.push copy sequence
               sequence.clear()
             else
               sequence.push token.to_number()

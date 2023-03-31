@@ -77,7 +77,7 @@ assign_field_ids = |fields, tickets|
   # Assign field ids by sorting them in order of number of possibilities,
   # the first field will have a single option which can be assigned,
   # and then that possibility can be eliminated from the other fields.
-  pending_fields = fields.copy()
+  pending_fields = copy fields
   pending_fields.sort |_, field| field.possible_ids.size()
   until pending_fields.is_empty()
     name, field = pending_fields.get_index(0)

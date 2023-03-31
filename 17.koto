@@ -1,7 +1,6 @@
 # https://adventofcode.com/2020/day/17
 
 import set
-import map.deep_copy
 
 generate_local_3d = ||
   origin = (0, 0, 0, 0)
