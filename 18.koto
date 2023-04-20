@@ -19,8 +19,8 @@ peekable_tokens = |expression|
 
 evaluate_expression = |tokens, ops, min_priority|
   lhs = null
-  # Consume tokens until the end of the expression or an
-  # operator with insufficient priority is reached.
+  # Consume tokens until the end of the expression,
+  # or an operator with insufficient priority is reached.
   loop
     # Peek the next token to see if it should be consumed as part of this expression
     token = tokens.peek()
@@ -65,7 +65,8 @@ evaluate_2 = |input|
   evaluate_expression tokens, ops, 0
 
 @main = ||
-  input = io.read_to_string io.extend_path koto.script_dir, "input", "18"
+  input = io.extend_path koto.script_dir, "input", "18"
+    >> io.read_to_string
   expressions = input.lines().to_tuple()
 
   part_one = expressions

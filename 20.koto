@@ -3,7 +3,7 @@
 edge_id = |edge|
   # An edge is a series of 1s and 0s, a numerical ID can then be produced by packing the
   # edge as a binary number.
-  bits = edge.size()
+  bits = (copy edge).count()
   result = edge
     .enumerate()
     .fold 0, |result, (i, bit)|
@@ -16,11 +16,8 @@ make_tile = |tile_id, grid|
 
   edges: ||
     edge_ids = |edge|
-      # TODO it would be nice to have iterator.reverse() here
-      edge = edge.to_list()
-      yield edge_id edge
-      edge.reverse()
-      yield edge_id edge
+      yield edge_id (copy edge)
+      yield edge_id edge.reversed()
 
     ids = edge_ids self.grid.first()
     yield ids.next()

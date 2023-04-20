@@ -1,6 +1,7 @@
 # https://adventofcode.com/2020/day/8
 
 import enum.make_enum
+import iterator.repeat
 
 ops = make_enum "nop", "acc", "jmp"
 
@@ -16,8 +17,9 @@ parse_program = |input|
 run_program = |program|
   ip = 0
   acc = 0
-  visited = list.with_size program.size(), false
-  while ip < program.size() and not visited[ip]
+  size = program.size()
+  visited = repeat(false, size).to_list()
+  while ip < size and not visited[ip]
     op, value = program[ip]
     visited[ip] = true
     match op
@@ -28,7 +30,7 @@ run_program = |program|
         ip += 1
       ops.jmp then
         ip += value
-  acc.to_int(), ip >= program.size()
+  acc.to_int(), ip >= size
 
 fix_program_and_get_result = |program|
   for ip in 0..program.size()

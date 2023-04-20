@@ -1,9 +1,11 @@
 # https://adventofcode.com/2020/day/14
 
+import iterator.repeat
+
 play_game = |start_numbers, turn_count|
   last_number = null
   turn = 1
-  numbers = list.with_size turn_count, ()
+  numbers = repeat(null, turn_count).to_list()
 
   # Work through the start numbers
   for n in start_numbers
