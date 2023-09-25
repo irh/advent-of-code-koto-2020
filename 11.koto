@@ -1,6 +1,6 @@
 # https://adventofcode.com/2020/day/11
 
-import enum.make_enum
+from enum import make_enum
 
 cell = make_enum "floor", "empty", "occupied"
 

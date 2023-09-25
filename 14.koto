@@ -1,6 +1,6 @@
 # https://adventofcode.com/2020/day/14
 
-import enum.make_enum
+from enum import make_enum
 
 commands = make_enum "mask", "mem"
 

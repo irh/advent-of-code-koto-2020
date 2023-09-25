@@ -1,6 +1,6 @@
 # https://adventofcode.com/2020/day/12
 
-import geometry.vec2
+from geometry import vec2
 
 north = vec2 0, 1
 south = vec2 0, -1

@@ -1,7 +1,7 @@
 # https://adventofcode.com/2020/day/10
 
 from io import extend_path, read_to_string
-import koto.script_dir
+from koto import script_dir
 
 parse_input = |input|
   input

@@ -1,7 +1,7 @@
 # https://adventofcode.com/2020/day/8
 
-import enum.make_enum
-import iterator.repeat
+from enum import make_enum
+from iterator import repeat
 
 ops = make_enum "nop", "acc", "jmp"
 
